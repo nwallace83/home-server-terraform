@@ -16,11 +16,18 @@ resource "docker_container" "plex" {
   ]
 
   dynamic "volumes" {
-    for_each = var.plex_volumes
+    for_each = var.mount_volumes
     content {
       container_path = volumes.value.container_path
       host_path = volumes.value.host_path
+      read_only = volumes.value.read_only
     }
+  }
+
+  volumes {
+    container_path  = "/etc/localtime"
+    host_path = "/etc/localtime"
+    read_only = true
   }
 
   ports {

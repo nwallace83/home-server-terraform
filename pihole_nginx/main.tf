@@ -18,6 +18,12 @@ resource "docker_container" "pihole_nginx" {
     }
   }
 
+  volumes {
+    container_path  = "/etc/localtime"
+    host_path = "/etc/localtime"
+    read_only = true
+  }
+
   ports {
     external = 53
     internal = 53

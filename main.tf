@@ -19,7 +19,7 @@ module "plex" {
 
   local_ip = var.local_ip
   network = docker_network.media.id
-  plex_volumes = var.plex_volumes
+  mount_volumes = var.plex_volumes
   dns_server = module.pihole_nginx.media_ip_address
 }
 
@@ -30,6 +30,62 @@ module "delugevpn" {
 
   network = docker_network.media.id
   dns_server = module.pihole_nginx.media_ip_address
+
+  delugevpn_vpn_user = var.delugevpn_vpn_user
+  delugevpn_vpn_password = var.delugevpn_vpn_password
+  mount_volumes = var.delugevpn_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
+}
+
+#####################################################################################################################
+
+module "handbrake" {
+  source = "./handbrake"
+
+  network = docker_network.media.id
+  dns_server = module.pihole_nginx.media_ip_address
+
+  mount_volumes = var.handbrake_volumes
+}
+
+#####################################################################################################################
+
+module "prowlarr" {
+  source = "./prowlarr"
+
+  network = docker_network.media.id
+  dns_server = module.pihole_nginx.media_ip_address
+
+  mount_volumes = var.prowlarr_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
+}
+
+#####################################################################################################################
+
+module "radarr" {
+  source = "./radarr"
+
+  network = docker_network.media.id
+  dns_server = module.pihole_nginx.media_ip_address
+
+  mount_volumes = var.radarr_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
+}
+
+#####################################################################################################################
+
+module "sickchill" {
+  source = "./sickchill"
+
+  network = docker_network.media.id
+  dns_server = module.pihole_nginx.media_ip_address
+
+  mount_volumes = var.sickchill_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
 }
 
 #####################################################################################################################

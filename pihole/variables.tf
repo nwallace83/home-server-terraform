@@ -16,7 +16,13 @@ variable "pihole_dns_origins" {
 }
 
 variable "pihole_volumes" {
-  type = list
+  type = list(object({
+    container_path = string
+    host_prefix = string
+    host_suffix = string
+    read_only = optional(bool, false)
+  }))
+  default = []
 }
 
 variable "instance_number" {

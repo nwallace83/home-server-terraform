@@ -1,7 +1,3 @@
-variable "local_ip" {
-  type = string
-}
-
 variable "network" {
   type = string
 }
@@ -17,4 +13,12 @@ variable "mount_volumes" {
 
 variable "dns_server" {
   type = string
+}
+
+variable "local_uid" {
+  type = number
+}
+
+variable "local_gid" {
+  type = number
 }

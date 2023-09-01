@@ -18,6 +18,7 @@ resource "docker_container" "pihole" {
     content {
       container_path = volumes.value.container_path
       host_path = "${volumes.value.host_prefix}/pihole${var.instance_number}/${volumes.value.host_suffix}"
+      read_only = volumes.value.read_only
     }
   }
 

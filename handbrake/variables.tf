@@ -1,7 +1,3 @@
-variable "local_ip" {
-  type = string
-}
-
 variable "network" {
   type = string
 }

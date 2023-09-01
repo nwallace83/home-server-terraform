@@ -8,11 +8,6 @@ variable "nginx_config_file" {
   description = "Path to nginx config file"
 }
 
-variable "plex_volumes" {
-  type = list
-  description = "List of docker volumes to be mounted by Plex"
-}
-
 variable "docker_provider_host" {
   type = string
   description = "Docker provider host"
@@ -30,8 +25,97 @@ variable "pihole_dns_origins" {
   description = "List of remote DNS servers for pihole backend"
 }
 
+variable "delugevpn_vpn_user" {
+  type = string
+  description = "VPN username for delugevpn"
+}
+
+variable "delugevpn_vpn_password" {
+  type = string
+  description = "VPN password for delugevpn"
+}
+
+variable "local_uid" {
+  type = number
+  default = 1000
+  description = "Local *nix uid"
+}
+
+variable "local_gid" {
+  type = number
+  default = 1000
+  description = "Local *nix gid"
+}
+
+#####################################################################################################################
+
 variable "pihole_volumes" {
-  type = list
+  type = list(object({
+    container_path = string
+    host_prefix = string
+    host_suffix = string
+    read_only = optional(bool, false)
+  }))
   default = []
   description = "List of docker volumes to be mounted by pihole"
+}
+
+variable "plex_volumes" {
+  type = list(object({
+    container_path = string
+    host_path = string
+    read_only = optional(bool, false)
+  }))
+  default = []
+  description = "List of docker volumes to be mounted by Plex"
+}
+
+variable "delugevpn_volumes" {
+  type = list(object({
+    container_path = string
+    host_path = string
+    read_only = optional(bool, false)
+  }))
+  default = []
+  description = "List of docker volumes to be mounted by delugevpn"
+}
+
+variable "handbrake_volumes" {
+  type = list(object({
+    container_path = string
+    host_path = string
+    read_only = optional(bool, false)
+  }))
+  default = []
+  description = "List of docker volumes to be mounted by handbrake"
+}
+
+variable "prowlarr_volumes" {
+  type = list(object({
+    container_path = string
+    host_path = string
+    read_only = optional(bool, false)
+  }))
+  default = []
+  description = "List of docker volumes to be mounted by prowlarr"
+}
+
+variable "radarr_volumes" {
+  type = list(object({
+    container_path = string
+    host_path = string
+    read_only = optional(bool, false)
+  }))
+  default = []
+  description = "List of docker volumes to be mounted by radarr"
+}
+
+variable "sickchill_volumes" {
+  type = list(object({
+    container_path = string
+    host_path = string
+    read_only = optional(bool, false)
+  }))
+  default = []
+  description = "List of docker volumes to be mounted by sickchill"
 }
