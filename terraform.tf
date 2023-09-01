@@ -8,6 +8,5 @@ terraform {
 }
 
 provider "docker" {
-  host = var.docker_provider_host
-  ssh_opts = var.docker_provider_ssh_opts
+  host = "unix:///var/run/docker.sock"
 }

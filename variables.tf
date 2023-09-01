@@ -8,17 +8,6 @@ variable "nginx_config_file" {
   description = "Path to nginx config file"
 }
 
-variable "docker_provider_host" {
-  type = string
-  description = "Docker provider host"
-}
-
-variable "docker_provider_ssh_opts" {
-  type = list(string)
-  default = []
-  description = "Docker provider ssh options"
-}
-
 variable "pihole_dns_origins" {
   type = string
   default = "1.1.1.1;8.8.8.8;8.8.4.4"
