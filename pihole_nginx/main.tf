@@ -3,11 +3,11 @@ resource "docker_image" "nginx" {
   keep_locally = true
 }
 
-resource "docker_container" "nginx_pihole" {
+resource "docker_container" "pihole_nginx" {
   image = docker_image.nginx.image_id
 
-  name = "nginx_pihole"
-  hostname = "nginx_pihole"
+  name = "pihole_nginx"
+  hostname = "pihole_nginx"
   restart = "unless-stopped"
   env = [ "TZ=America/Denver" ]
 
@@ -38,5 +38,5 @@ resource "docker_container" "nginx_pihole" {
 }
 
 output "media_ip_address" {
-  value = docker_container.nginx_pihole.network_data[index(docker_container.nginx_pihole.network_data.*.network_name,"media")].ip_address
+  value = docker_container.pihole_nginx.network_data[index(docker_container.pihole_nginx.network_data.*.network_name,"media")].ip_address
 }

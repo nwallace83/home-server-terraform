@@ -1,17 +1,10 @@
-variable "name" {
-  type = string
-}
-
-variable "hostname" {
+variable "local_ip" {
   type = string
 }
 
 variable "timezone" {
   type = string
-}
-
-variable "pihole_web_port" {
-  type = number
+  default = "America/Denver"
 }
 
 variable "network" {
@@ -28,4 +21,5 @@ variable "pihole_volumes" {
 
 variable "instance_number" {
   type = number
+  default = 0
 }

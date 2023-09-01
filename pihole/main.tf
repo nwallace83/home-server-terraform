@@ -5,9 +5,9 @@ resource "docker_image" "pihole" {
 
 resource "docker_container" "pihole" {
   image = docker_image.pihole.image_id
-  name = var.name
+  name = "pihole${var.instance_number}"
   restart = "unless-stopped"
-  hostname = var.hostname
+  hostname = "pihole${var.instance_number}"
 
   networks_advanced {
     name = var.network
@@ -25,12 +25,13 @@ resource "docker_container" "pihole" {
     "TZ=${var.timezone}",
     "WEBPASSWORD=pa55word",
     "DNSMASQ_LISTENING=all",
-    "PIHOLE_DNS_=${var.pihole_dns_origins}"
+    "PIHOLE_DNS_=${var.pihole_dns_origins}",
+    "FTLCONF_LOCAL_IPV4=${var.local_ip}"
     ]
 
     ports {
         internal = 80
-        external = var.pihole_web_port
+        external = 8083 + var.instance_number
         protocol = "tcp"
     }
 }

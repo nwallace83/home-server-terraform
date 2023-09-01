@@ -5,7 +5,7 @@ docker_provider_host = "ssh://nate@server:22"
 docker_provider_ssh_opts = [ "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null" ]
 
 pihole_dns_origins = [ "192.168.0.5" ]
-nginx_config_file = "/mnt/docker/nginx_pihole.conf"
+nginx_config_file = "/mnt/docker/pihole_nginx.conf"
 
 pihole_volumes = [
   {

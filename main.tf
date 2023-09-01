@@ -30,19 +30,12 @@ variable "timezones_pihole" {
   default = ["America/Denver","America/Los_Angeles"]
 }
 
-variable "pihole_web_port" {
-  type = list
-  default = [8084,8085]
-}
-
 module "pihole" {
   source = "./pihole"
   count = 2
 
-  name = "pihole${count.index + 1}"
-  hostname = "pihole${count.index + 1}"
+  local_ip = var.local_ip
   timezone = "${var.timezones_pihole[count.index]}"
-  pihole_web_port = var.pihole_web_port[count.index]
   pihole_volumes = var.pihole_volumes
   network = docker_network.pihole.id
   pihole_dns_origins = var.pihole_dns_origins
