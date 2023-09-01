@@ -1,5 +1,4 @@
 local_ip = "192.168.0.10"
-timezone = "America/Denver"
 
 docker_provider_host = "unix:///var/run/docker.sock"
 

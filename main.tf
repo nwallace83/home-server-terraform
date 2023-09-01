@@ -18,7 +18,6 @@ module "plex" {
   source = "./plex"
 
   local_ip = var.local_ip
-  timezone = var.timezone
   network = docker_network.media.id
   plex_volumes = var.plex_volumes
   dns_server = module.pihole_nginx.media_ip_address
@@ -52,6 +51,7 @@ module "pihole" {
 
 module "pihole_nginx" {
   source = "./pihole_nginx"
+  nginx_config_file = var.nginx_config_file
   networks = [ docker_network.pihole, docker_network.media ]
 }
 

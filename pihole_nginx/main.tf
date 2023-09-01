@@ -9,7 +9,7 @@ resource "docker_container" "nginx_pihole" {
   name = "nginx_pihole"
   hostname = "nginx_pihole"
   restart = "unless-stopped"
-  env = [ "TZ=${var.timezone}" ]
+  env = [ "TZ=America/Denver" ]
 
   dynamic "networks_advanced" {
     for_each = var.networks

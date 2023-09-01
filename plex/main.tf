@@ -11,7 +11,7 @@ resource "docker_container" "plex" {
   dns = [ var.dns_server ]
   
   env = [ 
-    "TZ=${var.timezone}",
+    "TZ=America/Denver",
     "ADVERTISE_IP=${var.local_ip}:32400/"
   ]
 

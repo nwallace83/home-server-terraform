@@ -8,11 +8,6 @@ variable "nginx_config_file" {
   description = "Path to nginx config file"
 }
 
-variable "timezone" {
-  type = string
-  description = "Local timezone.... i.e. America/Denver"
-}
-
 variable "plex_volumes" {
   type = list
   description = "List of docker volumes to be mounted by Plex"
