@@ -25,6 +25,15 @@ module "plex" {
 
 #####################################################################################################################
 
+module "delugevpn" {
+  source = "./delugevpn"
+
+  network = docker_network.media.id
+  dns_server = module.pihole_nginx.media_ip_address
+}
+
+#####################################################################################################################
+
 variable "timezones_pihole" {
   type = list
   default = ["America/Denver","America/Los_Angeles"]
