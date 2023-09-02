@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+echo "Start time: `date`"
+
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
@@ -21,3 +23,5 @@ terraform plan
 terraform apply -auto-approve
 
 docker image prune -f
+
+echo "End time: `date`"
