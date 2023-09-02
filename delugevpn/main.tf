@@ -8,7 +8,7 @@ resource "docker_container" "delugevpn" {
   name = "delugevpn"
   restart = "unless-stopped"
   hostname = "delugevpn"
-  dns = [ var.dns_server ]
+  dns = [ var.dns_server, "1.1.1.1" ]
 
   networks_advanced {
     name = var.network

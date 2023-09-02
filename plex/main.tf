@@ -8,7 +8,7 @@ resource "docker_container" "plex" {
   name = "plex"
   restart = "unless-stopped"
   hostname = "plex"
-  dns = [ var.dns_server ]
+  dns = [ var.dns_server, "1.1.1.1" ]
   
   env = [ 
     "TZ=America/Denver",

@@ -7,7 +7,7 @@ resource "docker_container" "radarr" {
   image = docker_image.radarr.image_id
   name = "radarr"
   restart = "unless-stopped"
-  dns = [ var.dns_server ]
+  dns = [ var.dns_server, "1.1.1.1" ]
 
   env = [ 
     "TZ=America/Denver",

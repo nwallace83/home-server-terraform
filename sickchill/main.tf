@@ -7,7 +7,7 @@ resource "docker_container" "sickchill" {
   image = docker_image.sickchill.image_id
   name = "sickchill"
   restart = "unless-stopped"
-  dns = [ var.dns_server ]
+  dns = [ var.dns_server, "1.1.1.1" ]
 
   env = [ 
     "TZ=America/Denver",

@@ -6,6 +6,8 @@ resource "docker_image" "prowlarr" {
 resource "docker_container" "prowlarr" {
   image = docker_image.prowlarr.image_id
   name = "prowlarr"
+  restart = "unless-stopped"
+  dns = [ var.dns_server, "1.1.1.1" ]
 
   env = [ 
     "TZ=America/Denver",
@@ -13,8 +15,6 @@ resource "docker_container" "prowlarr" {
     "PGID=${var.local_gid}"
   ]
 
-  restart = "unless-stopped"
-  dns = [ var.dns_server ]
 
   networks_advanced {
     name = var.network
