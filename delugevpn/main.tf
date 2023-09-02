@@ -56,19 +56,4 @@ resource "docker_container" "delugevpn" {
     internal = 8112
     external = 8112
   }
-
-  ports {
-    internal = 8118
-    external = 8118
-  }
-
-  ports {
-    internal = 58846
-    external = 58846
-  }
-
-  ports {
-    internal = 58946
-    external = 58946
-  }  
 }
