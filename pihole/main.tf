@@ -8,7 +8,7 @@ resource "docker_container" "pihole" {
   name = "pihole${var.instance_number}"
   restart = "unless-stopped"
   hostname = "pihole${var.instance_number}"
-  dns = [ "127.0.0.1" ]
+  dns = [ "127.0.0.1", "1.1.1.1" ]
 
   networks_advanced {
     name = var.network
