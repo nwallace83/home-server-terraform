@@ -28,7 +28,8 @@ resource "docker_container" "pihole" {
     "WEBPASSWORD=pa55word",
     "DNSMASQ_LISTENING=all",
     "PIHOLE_DNS_=${var.pihole_dns_origins}",
-    "FTLCONF_LOCAL_IPV4=${var.local_ip}"
+    "FTLCONF_LOCAL_IPV4=${var.local_ip}",
+    "IPv6=false"
     ]
 
     ports {
