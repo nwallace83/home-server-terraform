@@ -11,7 +11,6 @@ docker pull linuxserver/prowlarr:latest
 docker pull plexinc/pms-docker:latest
 docker pull binhex/arch-delugevpn:latest
 docker pull jlesage/handbrake:latest
-docker image prune -f
 
 git checkout .terraform.lock.hcl
 git pull
@@ -20,3 +19,5 @@ terraform init --upgrade -force-copy
 terraform destroy -auto-approve
 terraform plan
 terraform apply -auto-approve
+
+docker image prune -f
