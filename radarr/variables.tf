@@ -5,8 +5,8 @@ variable "network" {
 variable "mount_volumes" {
   type = list(object({
     container_path = string
-    host_path = string
-    read_only = optional(bool, false)
+    host_path      = string
+    read_only      = optional(bool, false)
   }))
   default = []
 }

@@ -1,16 +1,16 @@
 resource "docker_image" "plex" {
-  name = "plexinc/pms-docker:latest"
+  name         = "plexinc/pms-docker:latest"
   keep_locally = true
 }
 
 resource "docker_container" "plex" {
-  image = docker_image.plex.image_id
-  name = "plex"
-  restart = "unless-stopped"
+  image    = docker_image.plex.image_id
+  name     = "plex"
+  restart  = "unless-stopped"
   hostname = "plex"
-  dns = [ var.dns_server, "1.1.1.1" ]
-  
-  env = [ 
+  dns      = [var.dns_server, "1.1.1.1"]
+
+  env = [
     "TZ=America/Denver",
     "ADVERTISE_IP=${var.local_ip}:32400/"
   ]
@@ -19,15 +19,15 @@ resource "docker_container" "plex" {
     for_each = var.mount_volumes
     content {
       container_path = volumes.value.container_path
-      host_path = volumes.value.host_path
-      read_only = volumes.value.read_only
+      host_path      = volumes.value.host_path
+      read_only      = volumes.value.read_only
     }
   }
 
   volumes {
-    container_path  = "/etc/localtime"
-    host_path = "/etc/localtime"
-    read_only = true
+    container_path = "/etc/localtime"
+    host_path      = "/etc/localtime"
+    read_only      = true
   }
 
   ports {

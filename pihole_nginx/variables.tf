@@ -1,5 +1,5 @@
 variable "networks" {
-  type = list
+  type = list(any)
 }
 
 variable "nginx_config_file" {

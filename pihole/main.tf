@@ -1,25 +1,25 @@
 resource "docker_image" "pihole" {
-  name = "pihole/pihole:latest"
+  name         = "pihole/pihole:latest"
   keep_locally = true
 }
 
 resource "docker_container" "pihole" {
-  image = docker_image.pihole.image_id
-  name = "pihole${var.instance_number}"
-  restart = "unless-stopped"
+  image    = docker_image.pihole.image_id
+  name     = "pihole${var.instance_number}"
+  restart  = "unless-stopped"
   hostname = "pihole${var.instance_number}"
-  dns = [ "127.0.0.1", "1.1.1.1" ]
+  dns      = ["127.0.0.1", "1.1.1.1"]
 
   networks_advanced {
     name = var.network
   }
-  
+
   dynamic "volumes" {
     for_each = var.pihole_volumes
     content {
       container_path = volumes.value.container_path
-      host_path = "${volumes.value.host_prefix}/pihole${var.instance_number}/${volumes.value.host_suffix}"
-      read_only = volumes.value.read_only
+      host_path      = "${volumes.value.host_prefix}/pihole${var.instance_number}/${volumes.value.host_suffix}"
+      read_only      = volumes.value.read_only
     }
   }
 

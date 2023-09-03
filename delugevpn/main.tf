@@ -1,36 +1,36 @@
 resource "docker_image" "delugevpn" {
-  name = "binhex/arch-delugevpn:latest"
+  name         = "binhex/arch-delugevpn:latest"
   keep_locally = true
 }
 
 resource "docker_container" "delugevpn" {
-  image = docker_image.delugevpn.image_id
-  name = "delugevpn"
-  restart = "unless-stopped"
+  image    = docker_image.delugevpn.image_id
+  name     = "delugevpn"
+  restart  = "unless-stopped"
   hostname = "delugevpn"
-  dns = [ var.dns_server, "1.1.1.1" ]
+  dns      = [var.dns_server, "1.1.1.1"]
 
   networks_advanced {
     name = var.network
   }
 
   capabilities {
-    add = [ "NET_ADMIN" ]
+    add = ["NET_ADMIN"]
   }
 
- dynamic "volumes" {
+  dynamic "volumes" {
     for_each = var.mount_volumes
     content {
       container_path = volumes.value.container_path
-      host_path = volumes.value.host_path
-      read_only = volumes.value.read_only
+      host_path      = volumes.value.host_path
+      read_only      = volumes.value.read_only
     }
   }
 
   volumes {
-    container_path  = "/etc/localtime"
-    host_path = "/etc/localtime"
-    read_only = true
+    container_path = "/etc/localtime"
+    host_path      = "/etc/localtime"
+    read_only      = true
   }
 
   env = [

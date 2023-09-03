@@ -1,15 +1,15 @@
 resource "docker_image" "sickchill" {
-  name = "linuxserver/sickchill:latest"
+  name         = "linuxserver/sickchill:latest"
   keep_locally = true
 }
 
 resource "docker_container" "sickchill" {
-  image = docker_image.sickchill.image_id
-  name = "sickchill"
+  image   = docker_image.sickchill.image_id
+  name    = "sickchill"
   restart = "unless-stopped"
-  dns = [ var.dns_server, "1.1.1.1" ]
+  dns     = [var.dns_server, "1.1.1.1"]
 
-  env = [ 
+  env = [
     "TZ=America/Denver",
     "PUID=${var.local_uid}",
     "PGID=${var.local_gid}"
@@ -23,15 +23,15 @@ resource "docker_container" "sickchill" {
     for_each = var.mount_volumes
     content {
       container_path = volumes.value.container_path
-      host_path = volumes.value.host_path
-      read_only = volumes.value.read_only
+      host_path      = volumes.value.host_path
+      read_only      = volumes.value.read_only
     }
   }
 
   volumes {
-    container_path  = "/etc/localtime"
-    host_path = "/etc/localtime"
-    read_only = true
+    container_path = "/etc/localtime"
+    host_path      = "/etc/localtime"
+    read_only      = true
   }
 
   ports {

@@ -3,7 +3,7 @@ variable "local_ip" {
 }
 
 variable "timezone" {
-  type = string
+  type    = string
   default = "America/Denver"
 }
 
@@ -18,14 +18,14 @@ variable "pihole_dns_origins" {
 variable "pihole_volumes" {
   type = list(object({
     container_path = string
-    host_prefix = string
-    host_suffix = string
-    read_only = optional(bool, false)
+    host_prefix    = string
+    host_suffix    = string
+    read_only      = optional(bool, false)
   }))
   default = []
 }
 
 variable "instance_number" {
-  type = number
+  type    = number
   default = 0
 }
