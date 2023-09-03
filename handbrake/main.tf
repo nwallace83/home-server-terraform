@@ -4,13 +4,11 @@ resource "docker_image" "handbrake" {
 }
 
 resource "docker_container" "handbrake" {
-  image = docker_image.handbrake.image_id
-  name  = "handbrake"
-
+  image   = docker_image.handbrake.image_id
+  name    = "handbrake"
   restart = "unless-stopped"
   dns     = [var.dns_server, "1.1.1.1"]
-
-  env = ["TZ=America/Denver"]
+  env     = ["TZ=America/Denver"]
 
   networks_advanced {
     name = var.network

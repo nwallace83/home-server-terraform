@@ -9,7 +9,7 @@ resource "docker_container" "plex" {
   restart  = "unless-stopped"
   hostname = "plex"
   dns      = [var.dns_server, "1.1.1.1"]
-
+  
   env = [
     "TZ=America/Denver",
     "ADVERTISE_IP=http://${var.local_ip}:32400/"

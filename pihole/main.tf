@@ -10,6 +10,15 @@ resource "docker_container" "pihole" {
   hostname = "pihole${var.instance_number}"
   dns      = ["127.0.0.1", "1.1.1.1"]
 
+  env = [
+    "TZ=${var.timezone}",
+    "WEBPASSWORD=pa55word",
+    "DNSMASQ_LISTENING=all",
+    "PIHOLE_DNS_=${var.pihole_dns_origins}",
+    "FTLCONF_LOCAL_IPV4=${var.local_ip}",
+    "IPv6=false"
+  ]
+
   networks_advanced {
     name = var.network
   }
@@ -22,15 +31,6 @@ resource "docker_container" "pihole" {
       read_only      = volumes.value.read_only
     }
   }
-
-  env = [
-    "TZ=${var.timezone}",
-    "WEBPASSWORD=pa55word",
-    "DNSMASQ_LISTENING=all",
-    "PIHOLE_DNS_=${var.pihole_dns_origins}",
-    "FTLCONF_LOCAL_IPV4=${var.local_ip}",
-    "IPv6=false"
-  ]
 
   ports {
     internal = 80

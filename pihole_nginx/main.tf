@@ -4,8 +4,7 @@ resource "docker_image" "nginx" {
 }
 
 resource "docker_container" "pihole_nginx" {
-  image = docker_image.nginx.image_id
-
+  image    = docker_image.nginx.image_id
   name     = "pihole_nginx"
   hostname = "pihole_nginx"
   restart  = "unless-stopped"
