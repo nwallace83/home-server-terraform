@@ -30,11 +30,11 @@ resource "docker_container" "pihole" {
     "PIHOLE_DNS_=${var.pihole_dns_origins}",
     "FTLCONF_LOCAL_IPV4=${var.local_ip}",
     "IPv6=false"
-    ]
+  ]
 
-    ports {
-        internal = 80
-        external = 8083 + var.instance_number
-        protocol = "tcp"
-    }
+  ports {
+    internal = 80
+    external = 8083 + var.instance_number
+    protocol = "tcp"
+  }
 }
