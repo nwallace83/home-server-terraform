@@ -86,7 +86,7 @@ module "sickchill" {
 #####################################################################################################################
 
 variable "timezones_pihole" {
-  type    = list(any)
+  type    = list(string)
   default = ["America/Denver", "America/Los_Angeles"]
 }
 
