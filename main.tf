@@ -30,7 +30,6 @@ module "delugevpn" {
 
   network = docker_network.media.id
   dns_server = module.pihole_nginx.media_ip_address
-
   delugevpn_vpn_user = var.delugevpn_vpn_user
   delugevpn_vpn_password = var.delugevpn_vpn_password
   mount_volumes = var.delugevpn_volumes
@@ -45,7 +44,6 @@ module "handbrake" {
 
   network = docker_network.media.id
   dns_server = module.pihole_nginx.media_ip_address
-
   mount_volumes = var.handbrake_volumes
 }
 
@@ -56,7 +54,6 @@ module "prowlarr" {
 
   network = docker_network.media.id
   dns_server = module.pihole_nginx.media_ip_address
-
   mount_volumes = var.prowlarr_volumes
   local_uid = var.local_uid
   local_gid = var.local_gid
@@ -69,7 +66,6 @@ module "radarr" {
 
   network = docker_network.media.id
   dns_server = module.pihole_nginx.media_ip_address
-
   mount_volumes = var.radarr_volumes
   local_uid = var.local_uid
   local_gid = var.local_gid
@@ -82,7 +78,6 @@ module "sickchill" {
 
   network = docker_network.media.id
   dns_server = module.pihole_nginx.media_ip_address
-
   mount_volumes = var.sickchill_volumes
   local_uid = var.local_uid
   local_gid = var.local_gid
@@ -98,7 +93,6 @@ variable "timezones_pihole" {
 module "pihole" {
   source = "./pihole"
   count = 2
-
   local_ip = var.local_ip
   timezone = "${var.timezones_pihole[count.index]}"
   pihole_volumes = var.pihole_volumes

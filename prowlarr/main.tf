@@ -15,7 +15,6 @@ resource "docker_container" "prowlarr" {
     "PGID=${var.local_gid}"
   ]
 
-
   networks_advanced {
     name = var.network
   }
