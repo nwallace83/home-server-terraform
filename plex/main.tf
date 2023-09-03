@@ -12,7 +12,7 @@ resource "docker_container" "plex" {
 
   env = [
     "TZ=America/Denver",
-    "ADVERTISE_IP=${var.local_ip}:32400/"
+    "ADVERTISE_IP=http://${var.local_ip}:32400/"
   ]
 
   dynamic "volumes" {
