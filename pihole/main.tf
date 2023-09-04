@@ -16,7 +16,9 @@ resource "docker_container" "pihole" {
     "DNSMASQ_LISTENING=all",
     "PIHOLE_DNS_=${var.pihole_dns_origins}",
     "FTLCONF_LOCAL_IPV4=${var.local_ip}",
-    "IPv6=false"
+    "IPv6=false",
+    "MAXDBDAYS=7",
+    "FTLCONF_GRAVITYDB=/tmp/gravity.db"
   ]
 
   networks_advanced {
@@ -27,7 +29,7 @@ resource "docker_container" "pihole" {
     for_each = var.pihole_volumes
     content {
       container_path = volumes.value.container_path
-      host_path      = "${volumes.value.host_prefix}/pihole${var.instance_number}/${volumes.value.host_suffix}"
+      host_path      = "${volumes.value.host_prefix}/pihole/${volumes.value.host_suffix}"
       read_only      = volumes.value.read_only
     }
   }
