@@ -18,7 +18,8 @@ resource "docker_container" "pihole" {
     "FTLCONF_LOCAL_IPV4=${var.local_ip}",
     "IPv6=false",
     "MAXDBDAYS=7",
-    "FTLCONF_GRAVITYDB=/opt/pihole/gravity.db"
+    "FTLCONF_GRAVITYDB=/opt/pihole/gravity.db",
+    "DBFILE=/opt/pihole/pihole-FTL.db"
   ]
 
   networks_advanced {
