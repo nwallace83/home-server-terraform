@@ -19,7 +19,7 @@ resource "docker_container" "pihole" {
     "IPv6=false",
     "MAXDBDAYS=7",
     "FTLCONF_GRAVITYDB=/opt/pihole/gravity.db",
-    "DBFILE=/opt/pihole/pihole-FTL.db"
+    "FTLCONF_DBFILE=/opt/pihole/pihole-FTL.db"
   ]
 
   networks_advanced {
