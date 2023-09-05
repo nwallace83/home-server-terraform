@@ -1,121 +1,75 @@
-resource "kubernetes_deployment" "sickchill" {
-  metadata {
-    name = "sickchill"
-    labels = {
-      app = "sickchill"
-    }
-  }
+module "sickchill" {
+  source = "./sickchill"
 
-  spec {
-    replicas = 1
-
-    selector {
-      match_labels = {
-        app = "sickchill"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "sickchill"
-        }
-      }
-
-      spec {
-        volume {
-          name = "test"
-          host_path {
-            path = "/tmp/docker/sickchill/config"
-          }
-          # persistent_volume_claim {
-          #   claim_name = kubernetes_persistent_volume_claim.sickchill-config-volume-claim.metadata.0.name
-          # }
-        }
-
-        container {
-          name  = "sickchill"
-          image = "linuxserver/sickchill:latest"
-
-          volume_mount {
-            name = "test"
-            mount_path = "/config"
-          }
-
-          port {
-            container_port = 8081
-          }
-        }
-      }
-    }
-  }
+  volumes   = var.sickchill_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
 }
 
-resource "kubernetes_service" "sickchill" {
-  metadata {
-    name = "sickchill-service"
-  }
+#####################################################################################################################
 
-  spec {
-    selector = {
-      app = "sickchill"
-    }
+module "radarr" {
+  source = "./radarr"
 
-    port {
-      port        = 8081
-      target_port = 8081
-    }
-
-  }
+  volumes   = var.radarr_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
 }
 
-# resource "kubernetes_persistent_volume_claim" "sickchill-config-volume-claim" {
-#   metadata {
-#     name = "sickchill-config-volume-claim"
-#   }
+#####################################################################################################################
 
-#   spec {
-#     access_modes = [ "ReadWriteOnce" ]
-#     volume_name = kubernetes_deployment.sickchill.metadata.0.name
-#     # storage_class_name = "hostpath"
-  
-#     resources {
-#       requests = {
-#         storage = "1Gi"
-#       }
-#     }
-#   }
-# }
+module "prowlarr" {
+  source = "./prowlarr"
 
-# resource "kubernetes_persistent_volume" "sickchill" {
-#   metadata {
-#     name = "sickchill-config-volume"
-#   }
+  volumes   = var.prowlarr_volumes
+  local_uid = var.local_uid
+  local_gid = var.local_gid
+}
 
-#   spec {
-#     capacity = {
-#       storage = "1Gi"
-#     }
+#####################################################################################################################
 
-#     access_modes = ["ReadWriteOnce"]
-#     persistent_volume_reclaim_policy = "Retain"
-#     # storage_class_name = "hostpath"
-#     persistent_volume_source {
-#       local {
-#         path = "/tmp"
-#       }
-#     }
+module "delugevpn" {
+  source = "./delugevpn"
 
-#     node_affinity {
-#       required {
-#         node_selector_term {
-#           match_expressions {
-#             key = "kubernetes.io/hostname"
-#             operator = "In"
-#             values = ["docker-desktop"]
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
+  volumes                = var.delugevpn_volumes
+  local_uid              = var.local_uid
+  local_gid              = var.local_gid
+  delugevpn_vpn_password = var.delugevpn_vpn_password
+  delugevpn_vpn_user     = var.delugevpn_vpn_user
+}
+
+#####################################################################################################################
+
+module "plex" {
+  source = "./plex"
+
+  volumes = var.plex_volumes
+  local_ip = var.local_ip
+}
+
+#####################################################################################################################
+
+module "handbrake" {
+  source = "./handbrake"
+
+  volumes = var.plex_volumes
+}
+
+#####################################################################################################################
+
+module "pihole" {
+  source = "./pihole"
+
+  volumes            = var.pihole_volumes
+  local_ip           = var.local_ip
+  pihole_dns_origins = var.pihole_dns_origins
+  password           = var.password
+}
+
+#####################################################################################################################
+
+module "ingress" {
+  source = "./ingress"
+
+  ingress_namespace = var.ingress_namespace
+}
