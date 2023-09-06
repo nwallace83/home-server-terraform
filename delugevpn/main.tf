@@ -110,47 +110,8 @@ resource "kubernetes_service" "delugevpn" {
     }
 
     port {
-      port        = 80
+      port        = 8112
       target_port = 8112
-    }
-  }
-}
-
-#####################################################################################################################
-
-resource "kubernetes_ingress_v1" "delugevpn_ingress" {
-  metadata {
-    name = "${var.app_name}-ingress"
-    annotations = {
-      "nginx.ingress.kubernetes.io/force-ssl-redirect" = "false"
-    }
-  }
-
-  spec {
-    ingress_class_name = "nginx"
-
-    tls {
-      hosts = [ "${var.app_name}.${var.local_domain}" ]
-      secret_name = var.local_tls_secret_name
-    }
-
-    rule {
-      host = "${var.app_name}.${var.local_domain}"
-      http {
-        path {
-          path      = "/"
-          path_type = "Prefix"
-          backend {
-            service {
-              name = "${var.app_name}-service"
-
-              port {
-                number = 80
-              }
-            }
-          }
-        }
-      }
     }
   }
 }
