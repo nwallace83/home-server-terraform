@@ -53,6 +53,18 @@ variable "local_domain" {
   description = "Domain for ingress' - default local"
 }
 
+variable "tls_certificate" {
+  type = string
+  default = ""
+  description = "Base 64 encoded tls certificate"
+}
+
+variable "tls_key" {
+  type = string
+  default = ""
+  description = "Base 64 encoded tls key"
+}
+
 #####################################################################################################################
 
 variable "plex_volumes" {

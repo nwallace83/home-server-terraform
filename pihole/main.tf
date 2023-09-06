@@ -157,6 +157,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
   metadata {
     name = "pihole-ingress"
     annotations = {
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
       "nginx.ingress.kubernetes.io/configuration-snippet" = "if ($uri = /) {return 302 /admin;}"
       "nginx.ingress.kubernetes.io/use-regex" = "true"
       "nginx.ingress.kubernetes.io/affinity"               = "cookie"
@@ -167,6 +168,11 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
 
   spec {
     ingress_class_name = "nginx"
+
+    tls {
+      hosts = [ "${var.app_name}.${var.local_domain}" ]
+      secret_name = var.local_tls_secret_name
+    }
 
     rule {
       host = "${var.app_name}.${var.local_domain}"

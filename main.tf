@@ -1,11 +1,12 @@
 module "sickchill" {
   source = "./sickchill"
 
-  volumes      = var.sickchill_volumes
-  local_uid    = var.local_uid
-  local_gid    = var.local_gid
-  timezone     = var.timezone
-  local_domain = var.local_domain
+  volumes               = var.sickchill_volumes
+  local_uid             = var.local_uid
+  local_gid             = var.local_gid
+  timezone              = var.timezone
+  local_domain          = var.local_domain
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -13,11 +14,12 @@ module "sickchill" {
 module "radarr" {
   source = "./radarr"
 
-  volumes      = var.radarr_volumes
-  local_uid    = var.local_uid
-  local_gid    = var.local_gid
-  timezone     = var.timezone
-  local_domain = var.local_domain
+  volumes               = var.radarr_volumes
+  local_uid             = var.local_uid
+  local_gid             = var.local_gid
+  timezone              = var.timezone
+  local_domain          = var.local_domain
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -25,11 +27,12 @@ module "radarr" {
 module "prowlarr" {
   source = "./prowlarr"
 
-  volumes      = var.prowlarr_volumes
-  local_uid    = var.local_uid
-  local_gid    = var.local_gid
-  timezone     = var.timezone
-  local_domain = var.local_domain
+  volumes               = var.prowlarr_volumes
+  local_uid             = var.local_uid
+  local_gid             = var.local_gid
+  timezone              = var.timezone
+  local_domain          = var.local_domain
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -44,6 +47,7 @@ module "delugevpn" {
   delugevpn_vpn_user     = var.delugevpn_vpn_user
   timezone               = var.timezone
   local_domain           = var.local_domain
+  local_tls_secret_name  = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -51,10 +55,11 @@ module "delugevpn" {
 module "plex" {
   source = "./plex"
 
-  volumes      = var.plex_volumes
-  local_ip     = var.local_ip
-  timezone     = var.timezone
-  local_domain = var.local_domain
+  volumes               = var.plex_volumes
+  local_ip              = var.local_ip
+  timezone              = var.timezone
+  local_domain          = var.local_domain
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -62,9 +67,10 @@ module "plex" {
 module "handbrake" {
   source = "./handbrake"
 
-  volumes      = var.plex_volumes
-  timezone     = var.timezone
-  local_domain = var.local_domain
+  volumes               = var.plex_volumes
+  timezone              = var.timezone
+  local_domain          = var.local_domain
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -72,14 +78,15 @@ module "handbrake" {
 module "pihole" {
   source = "./pihole"
 
-  volumes            = var.pihole_volumes
-  local_ip           = var.local_ip
-  local_uid          = var.local_uid
-  local_gid          = var.local_gid
-  pihole_dns_origins = var.pihole_dns_origins
-  password           = var.password
-  timezone           = var.timezone
-  local_domain       = var.local_domain
+  volumes               = var.pihole_volumes
+  local_ip              = var.local_ip
+  local_uid             = var.local_uid
+  local_gid             = var.local_gid
+  pihole_dns_origins    = var.pihole_dns_origins
+  password              = var.password
+  timezone              = var.timezone
+  local_domain          = var.local_domain
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
 #####################################################################################################################
@@ -87,7 +94,9 @@ module "pihole" {
 module "ingress_tcp_udp" {
   source = "./ingress-tcp-udp"
 
-  ingress_namespace        = var.ingress_namespace
+  ingress_namespace = var.ingress_namespace
+  tls_certificate   = var.tls_certificate
+  tls_key           = var.tls_key
 }
 
 #####################################################################################################################

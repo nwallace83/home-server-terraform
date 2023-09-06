@@ -11,6 +11,10 @@ variable "local_domain" {
   type = string
 }
 
+variable "local_tls_secret_name" {
+  type = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

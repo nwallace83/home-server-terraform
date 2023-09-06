@@ -21,3 +21,23 @@ resource "kubernetes_config_map" "udp_services" {
     "53" = "default/pihole-dns-service:53"
   }
 }
+
+#####################################################################################################################
+
+resource "kubernetes_secret" "local_tls_secret" {
+  metadata {
+    name = "local-tls-secret"
+  }
+  type = "tls"
+
+  data = {
+    "tls.crt" = var.tls_certificate
+    "tls.key" = var.tls_key
+  }
+}
+
+#####################################################################################################################
+
+output "local_tls_secret_name" {
+  value = kubernetes_secret.local_tls_secret.metadata.0.name
+}

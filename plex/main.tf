@@ -92,6 +92,11 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
 
   spec {
     ingress_class_name = "nginx"
+
+    tls {
+      hosts = [ "${var.app_name}.${var.local_domain}" ]
+      secret_name = var.local_tls_secret_name
+    }
     
     rule {
       host = "${var.app_name}.${var.local_domain}"
@@ -119,6 +124,9 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
 resource "kubernetes_service" "plex" {
   metadata {
     name = "${var.app_name}-service"
+    annotations = {
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
+    }
   }
 
   spec {

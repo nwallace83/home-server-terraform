@@ -121,10 +121,18 @@ resource "kubernetes_service" "delugevpn" {
 resource "kubernetes_ingress_v1" "delugevpn_ingress" {
   metadata {
     name = "${var.app_name}-ingress"
+    annotations = {
+      "nginx.ingress.kubernetes.io/force-ssl-redirect" = "false"
+    }
   }
 
   spec {
     ingress_class_name = "nginx"
+
+    tls {
+      hosts = [ "${var.app_name}.${var.local_domain}" ]
+      secret_name = var.local_tls_secret_name
+    }
 
     rule {
       host = "${var.app_name}.${var.local_domain}"
