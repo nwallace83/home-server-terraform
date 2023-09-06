@@ -145,8 +145,7 @@ resource "kubernetes_service" "pihole_http" {
     }
 
     port {
-      name        = "http"
-      port        = 8081
+      port        = 80
       target_port = 80
     }
   }
@@ -180,7 +179,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
               name = "pihole-http-service"
 
               port {
-                number = 8081
+                number = 80
               }
             }
           }
@@ -198,7 +197,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
               name = "pihole-http-service"
 
               port {
-                number = 8081
+                number = 80
               }
             }
           }

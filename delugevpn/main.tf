@@ -110,7 +110,7 @@ resource "kubernetes_service" "delugevpn" {
     }
 
     port {
-      port        = 8081
+      port        = 80
       target_port = 8112
     }
   }
@@ -137,7 +137,7 @@ resource "kubernetes_ingress_v1" "delugevpn_ingress" {
               name = "${var.app_name}-service"
 
               port {
-                number = 8081
+                number = 80
               }
             }
           }

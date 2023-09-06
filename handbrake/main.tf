@@ -82,7 +82,7 @@ resource "kubernetes_service" "handbrake" {
     }
 
     port {
-      port        = 8081
+      port        = 80
       target_port = 5800
     }
   }
@@ -109,7 +109,7 @@ resource "kubernetes_ingress_v1" "handbrake_ingress" {
               name = "${var.app_name}-service"
 
               port {
-                number = 8081
+                number = 80
               }
             }
           }

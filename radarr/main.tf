@@ -97,7 +97,7 @@ resource "kubernetes_service" "radarr" {
     }
 
     port {
-      port        = 8081
+      port        = 80
       target_port = 7878
     }
   }
@@ -124,7 +124,7 @@ resource "kubernetes_ingress_v1" "radarr_ingress" {
               name = "${var.app_name}-service"
 
               port {
-                number = 8081
+                number = 80
               }
             }
           }

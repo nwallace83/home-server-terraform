@@ -97,7 +97,7 @@ resource "kubernetes_service" "prowlarr" {
     }
 
     port {
-      port        = 8081
+      port        = 80
       target_port = 9696
     }
   }
@@ -124,7 +124,7 @@ resource "kubernetes_ingress_v1" "prowlarr_ingress" {
               name = "${var.app_name}-service"
 
               port {
-                number = 8081
+                number = 80
               }
             }
           }
