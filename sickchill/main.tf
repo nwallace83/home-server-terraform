@@ -39,6 +39,13 @@ resource "kubernetes_deployment" "sickchill" {
           image = "linuxserver/sickchill:latest"
           image_pull_policy = "Always"
 
+          readiness_probe {
+            http_get {
+              path = "/"
+              port = 8081
+            }
+          }
+
           env {
             name  = "TZ"
             value = "America/Denver"

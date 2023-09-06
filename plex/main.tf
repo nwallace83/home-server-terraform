@@ -39,6 +39,13 @@ resource "kubernetes_deployment" "plex" {
           image = "plexinc/pms-docker:latest"
           image_pull_policy = "Always"
 
+          readiness_probe {
+            http_get {
+              path = "/"
+              port = 32400
+            }
+          }
+
           env {
             name  = "ADVERTISE_IP"
             value = "http://${var.local_ip}:32400/"

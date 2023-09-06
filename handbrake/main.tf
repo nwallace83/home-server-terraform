@@ -39,6 +39,13 @@ resource "kubernetes_deployment" "handbrake" {
           image = "jlesage/handbrake:latest"
           image_pull_policy = "Always"
 
+          readiness_probe {
+            http_get {
+              path = "/"
+              port = 5800
+            }
+          }
+
           env {
             name  = "TZ"
             value = "America/Denver"

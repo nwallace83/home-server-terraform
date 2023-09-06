@@ -44,8 +44,7 @@ resource "kubernetes_deployment" "delugevpn" {
               add = ["NET_ADMIN"]
             }
           }
-
-
+          
           env {
             name  = "VPN_ENABLED"
             value = "yes"

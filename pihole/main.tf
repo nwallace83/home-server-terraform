@@ -39,6 +39,13 @@ resource "kubernetes_deployment" "pihole" {
           image = "pihole/pihole:latest"
           image_pull_policy = "Always"
 
+          readiness_probe {
+            http_get {
+              path = "/admin"
+              port = 80
+            }
+          }
+
           env {
             name  = "TZ"
             value = "America/Denver"
