@@ -91,15 +91,17 @@ resource "kubernetes_deployment" "pihole" {
             value = "7"
           }
 
-          # env {
-          #   name  = "FTLCONF_GRAVITYDB"
-          #   value = "/opt/pihole/gravity.db"
-          # }
+          env {
+            name  = "FTLCONF_GRAVITYDB"
+            #value = "/opt/pihole/gravity.db"
+            value = "/etc/pihole/gravity.db"
+          }
 
-          # env {
-          #   name  = "FTLCONF_DBFILE"
-          #   value = "/opt/pihole/pihole-FTL.db"
-          # }
+          env {
+            name  = "FTLCONF_DBFILE"
+            #value = "/opt/pihole/pihole-FTL.db"
+            value = "/etc/pihole/pihole-FTL.db"
+          }
 
           dynamic "volume_mount" {
             for_each = var.volumes
