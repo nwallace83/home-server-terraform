@@ -38,3 +38,6 @@ tfplan
 
 # Fucking macs
 .DS_Store
+
+# don't accidentalliy upload vpn credentials
+credentials.conf
