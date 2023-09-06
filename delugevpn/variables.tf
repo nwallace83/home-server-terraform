@@ -1,11 +1,3 @@
-variable "network" {
-  type = string
-}
-
-variable "dns_server" {
-  type = string
-}
-
 variable "delugevpn_vpn_user" {
   type = string
 }
@@ -22,11 +14,12 @@ variable "local_gid" {
   type = number
 }
 
-variable "mount_volumes" {
+variable "volumes" {
   type = list(object({
+    name           = string
     container_path = string
-    host_path = string
-    read_only = optional(bool, false)
+    host_path      = string
+    read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
-  default = []
 }

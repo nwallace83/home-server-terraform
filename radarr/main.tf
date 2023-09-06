@@ -1,41 +1,90 @@
-resource "docker_image" "radarr" {
-  name         = "linuxserver/radarr:latest"
-  keep_locally = true
-}
-
-resource "docker_container" "radarr" {
-  image   = docker_image.radarr.image_id
-  name    = "radarr"
-  restart = "unless-stopped"
-  dns     = [var.dns_server, "1.1.1.1"]
-
-  env = [
-    "TZ=America/Denver",
-    "PUID=${var.local_uid}",
-    "PGID=${var.local_gid}"
-  ]
-
-  networks_advanced {
-    name = var.network
-  }
-
-  dynamic "volumes" {
-    for_each = var.mount_volumes
-    content {
-      container_path = volumes.value.container_path
-      host_path      = volumes.value.host_path
-      read_only      = volumes.value.read_only
+resource "kubernetes_deployment" "radarr" {
+  metadata {
+    name = "radarr"
+    labels = {
+      app = "radarr"
     }
   }
 
-  volumes {
-    container_path = "/etc/localtime"
-    host_path      = "/etc/localtime"
-    read_only      = true
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "radarr"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "radarr"
+        }
+      }
+
+      spec {
+        dynamic "volume" {
+          for_each = var.volumes
+          content {
+            name = volume.value.name
+            host_path {
+              path = volume.value.host_path
+              type = volume.value.type
+            }
+          }
+        }
+
+        container {
+          name  = "radarr"
+          image = "linuxserver/radarr:latest"
+          image_pull_policy = "Always"
+
+          env {
+            name  = "TZ"
+            value = "America/Denver"
+          }
+
+          env {
+            name  = "PUID"
+            value = var.local_uid
+          }
+
+          env {
+            name  = "PGID"
+            value = var.local_gid
+          }
+
+          dynamic "volume_mount" {
+            for_each = var.volumes
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.container_path
+              read_only  = volume_mount.value.read_only
+            }
+          }
+
+          port {
+            container_port = 7878
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "radarr" {
+  metadata {
+    name = "radarr-service"
   }
 
-  ports {
-    internal = 7878
-    external = 8082
+  spec {
+    selector = {
+      app = "radarr"
+    }
+
+    port {
+      port        = 8082
+      target_port = 7878
+    }
   }
 }

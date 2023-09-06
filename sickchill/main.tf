@@ -1,41 +1,90 @@
-resource "docker_image" "sickchill" {
-  name         = "linuxserver/sickchill:latest"
-  keep_locally = true
-}
-
-resource "docker_container" "sickchill" {
-  image   = docker_image.sickchill.image_id
-  name    = "sickchill"
-  restart = "unless-stopped"
-  dns     = [var.dns_server, "1.1.1.1"]
-
-  env = [
-    "TZ=America/Denver",
-    "PUID=${var.local_uid}",
-    "PGID=${var.local_gid}"
-  ]
-
-  networks_advanced {
-    name = var.network
-  }
-
-  dynamic "volumes" {
-    for_each = var.mount_volumes
-    content {
-      container_path = volumes.value.container_path
-      host_path      = volumes.value.host_path
-      read_only      = volumes.value.read_only
+resource "kubernetes_deployment" "sickchill" {
+  metadata {
+    name = "sickchill"
+    labels = {
+      app = "sickchill"
     }
   }
 
-  volumes {
-    container_path = "/etc/localtime"
-    host_path      = "/etc/localtime"
-    read_only      = true
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "sickchill"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "sickchill"
+        }
+      }
+
+      spec {
+        dynamic "volume" {
+          for_each = var.volumes
+          content {
+            name = volume.value.name
+            host_path {
+              path = volume.value.host_path
+              type = volume.value.type
+            }
+          }
+        }
+
+        container {
+          name  = "sickchill"
+          image = "linuxserver/sickchill:latest"
+          image_pull_policy = "Always"
+
+          env {
+            name  = "TZ"
+            value = "America/Denver"
+          }
+
+          env {
+            name  = "PUID"
+            value = var.local_uid
+          }
+
+          env {
+            name  = "PGID"
+            value = var.local_gid
+          }
+
+          dynamic "volume_mount" {
+            for_each = var.volumes
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.container_path
+              read_only  = volume_mount.value.read_only
+            }
+          }
+
+          port {
+            container_port = 8081
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "sickchill" {
+  metadata {
+    name = "sickchill-service"
   }
 
-  ports {
-    internal = 8081
-    external = 8081
+  spec {
+    selector = {
+      app = "sickchill"
+    }
+
+    port {
+      port        = 8081
+      target_port = 8081
+    }
   }
 }

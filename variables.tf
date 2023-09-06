@@ -3,11 +3,6 @@ variable "local_ip" {
   description = "Local IP address"
 }
 
-variable "nginx_config_file" {
-  type        = string
-  description = "Path to nginx config file"
-}
-
 variable "pihole_dns_origins" {
   type        = string
   default     = "1.1.1.1;8.8.8.8;8.8.4.4"
@@ -36,24 +31,25 @@ variable "local_gid" {
   description = "Local *nix gid"
 }
 
-#####################################################################################################################
-
-variable "pihole_volumes" {
-  type = list(object({
-    container_path = string
-    host_prefix    = string
-    host_suffix    = string
-    read_only      = optional(bool, false)
-  }))
-  default     = []
-  description = "List of docker volumes to be mounted by pihole"
+variable "password" {
+  type = string
 }
+
+variable "ingress_namespace" {
+  type = string
+  default = "ingress"
+  description = "Namespace for kubernetes ingress"
+}
+
+#####################################################################################################################
 
 variable "plex_volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
   default     = []
   description = "List of docker volumes to be mounted by Plex"
@@ -61,9 +57,11 @@ variable "plex_volumes" {
 
 variable "delugevpn_volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
   default     = []
   description = "List of docker volumes to be mounted by delugevpn"
@@ -71,9 +69,11 @@ variable "delugevpn_volumes" {
 
 variable "handbrake_volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
   default     = []
   description = "List of docker volumes to be mounted by handbrake"
@@ -81,9 +81,11 @@ variable "handbrake_volumes" {
 
 variable "prowlarr_volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
   default     = []
   description = "List of docker volumes to be mounted by prowlarr"
@@ -91,9 +93,11 @@ variable "prowlarr_volumes" {
 
 variable "radarr_volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
   default     = []
   description = "List of docker volumes to be mounted by radarr"
@@ -101,10 +105,24 @@ variable "radarr_volumes" {
 
 variable "sickchill_volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
   default     = []
   description = "List of docker volumes to be mounted by sickchill"
+}
+
+variable "pihole_volumes" {
+  type = list(object({
+    name           = string
+    container_path = string
+    host_path      = string
+    read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
+  }))
+  default     = []
+  description = "List of docker volumes to be mounted by pihole"
 }

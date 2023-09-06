@@ -1,7 +1,8 @@
 terraform {
   required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0"
     }
   }
 }

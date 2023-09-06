@@ -1,36 +1,80 @@
-resource "docker_image" "handbrake" {
-  name         = "jlesage/handbrake:latest"
-  keep_locally = true
-}
-
-resource "docker_container" "handbrake" {
-  image   = docker_image.handbrake.image_id
-  name    = "handbrake"
-  restart = "unless-stopped"
-  dns     = [var.dns_server, "1.1.1.1"]
-  env     = ["TZ=America/Denver"]
-
-  networks_advanced {
-    name = var.network
-  }
-
-  dynamic "volumes" {
-    for_each = var.mount_volumes
-    content {
-      container_path = volumes.value.container_path
-      host_path      = volumes.value.host_path
-      read_only      = volumes.value.read_only
+resource "kubernetes_deployment" "handbrake" {
+  metadata {
+    name = "handbrake"
+    labels = {
+      app = "handbrake"
     }
   }
 
-  volumes {
-    container_path = "/etc/localtime"
-    host_path      = "/etc/localtime"
-    read_only      = true
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "handbrake"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "handbrake"
+        }
+      }
+
+      spec {
+        dynamic "volume" {
+          for_each = var.volumes
+          content {
+            name = volume.value.name
+            host_path {
+              path = volume.value.host_path
+              type = volume.value.type
+            }
+          }
+        }
+
+        container {
+          name  = "handbrake"
+          image = "jlesage/handbrake:latest"
+          image_pull_policy = "Always"
+
+          env {
+            name  = "TZ"
+            value = "America/Denver"
+          }
+
+          dynamic "volume_mount" {
+            for_each = var.volumes
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.container_path
+              read_only  = volume_mount.value.read_only
+            }
+          }
+
+          port {
+            container_port = 5800
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "handbrake" {
+  metadata {
+    name = "handbrake-service"
   }
 
-  ports {
-    internal = 5800
-    external = 5800
+  spec {
+    selector = {
+      app = "handbrake"
+    }
+
+    port {
+      port        = 8084
+      target_port = 5800
+    }
   }
 }

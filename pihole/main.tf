@@ -1,43 +1,165 @@
-resource "docker_image" "pihole" {
-  name         = "pihole/pihole:latest"
-  keep_locally = true
-}
-
-resource "docker_container" "pihole" {
-  image    = docker_image.pihole.image_id
-  name     = "pihole${var.instance_number}"
-  restart  = "unless-stopped"
-  hostname = "pihole${var.instance_number}"
-  dns      = ["127.0.0.1", "1.1.1.1"]
-
-  env = [
-    "TZ=${var.timezone}",
-    "WEBPASSWORD=pa55word",
-    "DNSMASQ_LISTENING=all",
-    "PIHOLE_DNS_=${var.pihole_dns_origins}",
-    "FTLCONF_LOCAL_IPV4=${var.local_ip}",
-    "IPv6=false",
-    "MAXDBDAYS=7",
-    "FTLCONF_GRAVITYDB=/opt/pihole/gravity.db",
-    "FTLCONF_DBFILE=/opt/pihole/pihole-FTL.db"
-  ]
-
-  networks_advanced {
-    name = var.network
-  }
-
-  dynamic "volumes" {
-    for_each = var.pihole_volumes
-    content {
-      container_path = volumes.value.container_path
-      host_path      = "${volumes.value.host_prefix}/pihole/${volumes.value.host_suffix}"
-      read_only      = volumes.value.read_only
+resource "kubernetes_deployment" "pihole" {
+  metadata {
+    name = "pihole"
+    labels = {
+      app = "pihole"
     }
   }
 
-  ports {
-    internal = 80
-    external = 8083 + var.instance_number
-    protocol = "tcp"
+  spec {
+    replicas = 2
+
+    selector {
+      match_labels = {
+        app = "pihole"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "pihole"
+        }
+      }
+
+      spec {
+        dynamic "volume" {
+          for_each = var.volumes
+          content {
+            name = volume.value.name
+            host_path {
+              path = volume.value.host_path
+              type = volume.value.type
+            }
+          }
+        }
+
+        container {
+          name  = "pihole"
+          image = "pihole/pihole:latest"
+          image_pull_policy = "Always"
+
+          env {
+            name  = "TZ"
+            value = "America/Denver"
+          }
+
+          env {
+            name  = "WEBPASSWORD"
+            value = var.password
+          }
+
+          env {
+            name  = "DNSMASQ_LISTENING"
+            value = "all"
+          }
+
+          env {
+            name  = "PIHOLE_DNS_"
+            value = var.pihole_dns_origins
+          }
+
+          env {
+            name  = "FTLCONF_LOCAL_IPV4"
+            value = var.local_ip
+          }
+
+          env {
+            name  = "IPv6"
+            value = "false"
+          }
+
+          env {
+            name  = "FTLCONF_MAXDBDAYS"
+            value = "7"
+          }
+
+          env {
+            name  = "FTLCONF_GRAVITYDB"
+            value = "/opt/pihole/gravity.db"
+          }
+
+          env {
+            name  = "FTLCONF_DBFILE"
+            value = "/opt/pihole/pihole-FTL.db"
+          }
+
+          dynamic "volume_mount" {
+            for_each = var.volumes
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.container_path
+              read_only  = volume_mount.value.read_only
+            }
+          }
+
+          port {
+            container_port = 80
+          }
+
+          port {
+            container_port = 53
+            protocol       = "TCP"
+          }
+
+          port {
+            container_port = 53
+            protocol       = "UDP"
+          }
+        }
+      }
+    }
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_service" "pihole_dns" {
+  metadata {
+    name = "pihole-dns-service"
+  }
+
+  spec {
+    selector = {
+      app = "pihole"
+    }
+
+    type = "ClusterIP"
+
+    port {
+      name        = "dns-tcp"
+      port        = 53
+      target_port = 53
+      protocol    = "TCP"
+    }
+
+    port {
+      name        = "dns-udp"
+      port        = 53
+      target_port = 53
+      protocol    = "UDP"
+    }
+
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_service" "pihole_http" {
+
+  metadata {
+    name = "pihole-http-service"
+  }
+
+  spec {
+    selector = {
+      app = "pihole"
+    }
+
+    port {
+      name        = "http"
+      port        = 80
+      target_port = 80
+    }
   }
 }

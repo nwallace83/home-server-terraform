@@ -2,19 +2,12 @@ variable "local_ip" {
   type = string
 }
 
-variable "network" {
-  type = string
-}
-
-variable "mount_volumes" {
+variable "volumes" {
   type = list(object({
+    name           = string
     container_path = string
     host_path      = string
     read_only      = optional(bool, false)
+    type           = optional(string, "DirectoryOrCreate")
   }))
-  default = []
-}
-
-variable "dns_server" {
-  type = string
 }
