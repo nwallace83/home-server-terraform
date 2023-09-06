@@ -2,6 +2,11 @@ variable "local_ip" {
   type = string
 }
 
+variable "app_name" {
+  type    = string
+  default = "plex"
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

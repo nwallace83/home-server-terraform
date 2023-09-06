@@ -18,6 +18,11 @@ variable "local_gid" {
   type = number
 }
 
+variable "app_name" {
+  type    = string
+  default = "pihole"
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

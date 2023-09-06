@@ -1,8 +1,8 @@
 resource "kubernetes_deployment" "pihole" {
   metadata {
-    name = "pihole"
+    name = var.app_name
     labels = {
-      app = "pihole"
+      app = var.app_name
     }
   }
 
@@ -11,14 +11,14 @@ resource "kubernetes_deployment" "pihole" {
 
     selector {
       match_labels = {
-        app = "pihole"
+        app = var.app_name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "pihole"
+          app = var.app_name
         }
       }
 
@@ -35,8 +35,8 @@ resource "kubernetes_deployment" "pihole" {
         }
 
         container {
-          name  = "pihole"
-          image = "pihole/pihole:latest"
+          name              = var.app_name
+          image             = "pihole/pihole:latest"
           image_pull_policy = "Always"
 
           readiness_probe {
@@ -46,61 +46,10 @@ resource "kubernetes_deployment" "pihole" {
             }
           }
 
-          env {
-            name  = "TZ"
-            value = "America/Denver"
-          }
-
-          env {
-            name = "PIHOLE_UID"
-            value = var.local_uid
-          }
-
-          env {
-            name = "PIHOLE_GID"
-            value = var.local_gid
-          }
-
-          env {
-            name  = "WEBPASSWORD"
-            value = var.password
-          }
-
-          env {
-            name  = "DNSMASQ_LISTENING"
-            value = "all"
-          }
-
-          env {
-            name  = "PIHOLE_DNS_"
-            value = var.pihole_dns_origins
-          }
-
-          env {
-            name  = "FTLCONF_LOCAL_IPV4"
-            value = var.local_ip
-          }
-
-          env {
-            name  = "IPv6"
-            value = "false"
-          }
-
-          env {
-            name  = "FTLCONF_MAXDBDAYS"
-            value = "7"
-          }
-
-          env {
-            name  = "FTLCONF_GRAVITYDB"
-            #value = "/opt/pihole/gravity.db"
-            value = "/etc/pihole/gravity.db"
-          }
-
-          env {
-            name  = "FTLCONF_DBFILE"
-            #value = "/opt/pihole/pihole-FTL.db"
-            value = "/etc/pihole/pihole-FTL.db"
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.pihole_env_config_map.metadata.0.name
+            }
           }
 
           dynamic "volume_mount" {
@@ -128,6 +77,28 @@ resource "kubernetes_deployment" "pihole" {
         }
       }
     }
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_config_map" "pihole_env_config_map" {
+  metadata {
+    name = "pihole-env-config-map"
+  }
+
+  data = {
+    "TZ"                 = "America/Denver"
+    "PIHOLE_UID"         = var.local_uid
+    "PIHOLE_GID"         = var.local_gid
+    "WEBPASSWORD"        = var.password
+    "DNSMASQ_LISTENING"  = "all"
+    "PIHOLE_DNS_"        = var.pihole_dns_origins
+    "FTLCONF_LOCAL_IPV4" = var.local_ip
+    "IPv6"               = "false"
+    "FTLCONF_MAXDBDAYS"  = "7"
+    "FTLCONF_GRAVITYDB"  = "/etc/pihole/gravity.db"
+    "FTLCONF_DBFILE"     = "/etc/pihole/pihole-FTL.db"
   }
 }
 
@@ -181,4 +152,10 @@ resource "kubernetes_service" "pihole_http" {
       target_port = 80
     }
   }
+}
+
+#####################################################################################################################
+
+output "pihole_http_service_port" {
+  value = kubernetes_service.pihole_http.spec.0.port.0.port
 }

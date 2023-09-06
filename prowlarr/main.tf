@@ -1,6 +1,6 @@
 resource "kubernetes_deployment" "prowlarr" {
   metadata {
-    name = "prowlarr"
+    name = var.app_name
     labels = {
       app = "prowlarr"
     }
@@ -11,14 +11,14 @@ resource "kubernetes_deployment" "prowlarr" {
 
     selector {
       match_labels = {
-        app = "prowlarr"
+        app = var.app_name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "prowlarr"
+          app = var.app_name
         }
       }
 
@@ -35,8 +35,8 @@ resource "kubernetes_deployment" "prowlarr" {
         }
 
         container {
-          name  = "prowlarr"
-          image = "linuxserver/prowlarr:latest"
+          name              = var.app_name
+          image             = "linuxserver/prowlarr:latest"
           image_pull_policy = "Always"
 
           readiness_probe {
@@ -46,19 +46,10 @@ resource "kubernetes_deployment" "prowlarr" {
             }
           }
 
-          env {
-            name  = "TZ"
-            value = "America/Denver"
-          }
-
-          env {
-            name  = "PUID"
-            value = var.local_uid
-          }
-
-          env {
-            name  = "PGID"
-            value = var.local_gid
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.prowlarr_env_config_map.metadata.0.name
+            }
           }
 
           dynamic "volume_mount" {
@@ -79,14 +70,30 @@ resource "kubernetes_deployment" "prowlarr" {
   }
 }
 
+#####################################################################################################################
+
+resource "kubernetes_config_map" "prowlarr_env_config_map" {
+  metadata {
+    name = "${var.app_name}-env-config-map"
+  }
+
+  data = {
+    "PUID" = var.local_uid
+    "PGID" = var.local_gid
+    "TZ"   = "America/Denver"
+  }
+}
+
+#####################################################################################################################
+
 resource "kubernetes_service" "prowlarr" {
   metadata {
-    name = "prowlarr-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
     selector = {
-      app = "prowlarr"
+      app = var.app_name
     }
 
     port {
@@ -94,4 +101,10 @@ resource "kubernetes_service" "prowlarr" {
       target_port = 9696
     }
   }
+}
+
+#####################################################################################################################
+
+output "prowlarr_service_port" {
+  value = kubernetes_service.prowlarr.spec.0.port.0.port
 }

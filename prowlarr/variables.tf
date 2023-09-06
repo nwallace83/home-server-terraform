@@ -6,6 +6,11 @@ variable "local_gid" {
   type = number
 }
 
+variable "app_name" {
+  type    = string
+  default = "prowlarr"
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

@@ -1,8 +1,8 @@
 resource "kubernetes_deployment" "radarr" {
   metadata {
-    name = "radarr"
+    name = var.app_name
     labels = {
-      app = "radarr"
+      app = var.app_name
     }
   }
 
@@ -11,14 +11,14 @@ resource "kubernetes_deployment" "radarr" {
 
     selector {
       match_labels = {
-        app = "radarr"
+        app = var.app_name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "radarr"
+          app = var.app_name
         }
       }
 
@@ -35,8 +35,8 @@ resource "kubernetes_deployment" "radarr" {
         }
 
         container {
-          name  = "radarr"
-          image = "linuxserver/radarr:latest"
+          name              = var.app_name
+          image             = "linuxserver/radarr:latest"
           image_pull_policy = "Always"
 
           readiness_probe {
@@ -46,19 +46,10 @@ resource "kubernetes_deployment" "radarr" {
             }
           }
 
-          env {
-            name  = "TZ"
-            value = "America/Denver"
-          }
-
-          env {
-            name  = "PUID"
-            value = var.local_uid
-          }
-
-          env {
-            name  = "PGID"
-            value = var.local_gid
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.radarr_env_config_map.metadata.0.name
+            }
           }
 
           dynamic "volume_mount" {
@@ -79,14 +70,30 @@ resource "kubernetes_deployment" "radarr" {
   }
 }
 
+#####################################################################################################################
+
+resource "kubernetes_config_map" "radarr_env_config_map" {
+  metadata {
+    name = "${var.app_name}-env-config-map"
+  }
+
+  data = {
+    "PUID" = var.local_uid
+    "PGID" = var.local_gid
+    "TZ"   = "America/Denver"
+  }
+}
+
+#####################################################################################################################
+
 resource "kubernetes_service" "radarr" {
   metadata {
-    name = "radarr-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
     selector = {
-      app = "radarr"
+      app = var.app_name
     }
 
     port {
@@ -94,4 +101,10 @@ resource "kubernetes_service" "radarr" {
       target_port = 7878
     }
   }
+}
+
+#####################################################################################################################
+
+output "radarr_service_port" {
+  value = kubernetes_service.radarr.spec.0.port.0.port
 }

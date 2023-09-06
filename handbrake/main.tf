@@ -1,8 +1,8 @@
 resource "kubernetes_deployment" "handbrake" {
   metadata {
-    name = "handbrake"
+    name = var.app_name
     labels = {
-      app = "handbrake"
+      app = var.app_name
     }
   }
 
@@ -11,14 +11,14 @@ resource "kubernetes_deployment" "handbrake" {
 
     selector {
       match_labels = {
-        app = "handbrake"
+        app = var.app_name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "handbrake"
+          app = var.app_name
         }
       }
 
@@ -35,7 +35,7 @@ resource "kubernetes_deployment" "handbrake" {
         }
 
         container {
-          name  = "handbrake"
+          name  = var.app_name
           image = "jlesage/handbrake:latest"
           image_pull_policy = "Always"
 
@@ -69,14 +69,16 @@ resource "kubernetes_deployment" "handbrake" {
   }
 }
 
+#####################################################################################################################
+
 resource "kubernetes_service" "handbrake" {
   metadata {
-    name = "handbrake-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
     selector = {
-      app = "handbrake"
+      app = var.app_name
     }
 
     port {
@@ -84,4 +86,10 @@ resource "kubernetes_service" "handbrake" {
       target_port = 5800
     }
   }
+}
+
+#####################################################################################################################
+
+output "handbrake_service_port" {
+  value = kubernetes_service.handbrake.spec.0.port.0.port
 }

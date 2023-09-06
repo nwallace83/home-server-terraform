@@ -1,3 +1,8 @@
+variable "app_name" {
+  type    = string
+  default = "handbrake"
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

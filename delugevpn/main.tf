@@ -1,8 +1,8 @@
 resource "kubernetes_deployment" "delugevpn" {
   metadata {
-    name = "delugevpn"
+    name = var.app_name
     labels = {
-      app = "delugevpn"
+      app = var.app_name
     }
   }
 
@@ -11,14 +11,14 @@ resource "kubernetes_deployment" "delugevpn" {
 
     selector {
       match_labels = {
-        app = "delugevpn"
+        app = var.app_name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "delugevpn"
+          app = var.app_name
         }
       }
 
@@ -35,99 +35,20 @@ resource "kubernetes_deployment" "delugevpn" {
         }
 
         container {
-          name  = "delugevpn"
-          image = "binhex/arch-delugevpn:latest"
+          name              = var.app_name
+          image             = "binhex/arch-delugevpn:latest"
           image_pull_policy = "Always"
- 
+
           security_context {
             capabilities {
               add = ["NET_ADMIN"]
             }
           }
-          
-          env {
-            name  = "VPN_ENABLED"
-            value = "yes"
-          }
 
-          env {
-            name  = "VPN_PROV"
-            value = "pia"
-          }
-
-          env {
-            name  = "VPN_CLIENT"
-            value = "openvpn"
-          }
-
-          env {
-            name  = "VPN_USER"
-            value = var.delugevpn_vpn_user
-          }
-
-          env {
-            name  = "VPN_PASS"
-            value = var.delugevpn_vpn_password
-          }
-
-          env {
-            name  = "ENABLE_PRIVOXY"
-            value = "no"
-          }
-
-          env {
-            name  = "STRICT_PORT_FORWARD"
-            value = "yes"
-          }
-
-          env {
-            name  = "LAN_NETWORK"
-            value = "192.168.0.0/24"
-          }
-
-          env {
-            name  = "NAME_SERVERS"
-            value = "84.200.69.80,37.235.1.174,1.1.1.1,37.235.1.177,84.200.70.40,1.0.0.1"
-          }
-
-          env {
-            name  = "DEBUG"
-            value = "false"
-          }
-
-          env {
-            name  = "DELUGE_DAEMON_LOG_LEVEL"
-            value = "info"
-          }
-
-          env {
-            name  = "DELUGE_WEB_LOG_LEVEL"
-            value = "info"
-          }
-
-          env {
-            name  = "DELUGE_ENABLE_WEBUI_PASSWORD"
-            value = "yes"
-          }
-
-          env {
-            name  = "UMASK"
-            value = "000"
-          }
-
-          env {
-            name  = "PUID"
-            value = var.local_uid
-          }
-
-          env {
-            name  = "PGID"
-            value = var.local_gid
-          }
-
-          env {
-            name  = "TZ"
-            value = "America/Denver"
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.delugevpn_env_config_map.metadata.0.name
+            }
           }
 
           dynamic "volume_mount" {
@@ -150,6 +71,34 @@ resource "kubernetes_deployment" "delugevpn" {
 
 #####################################################################################################################
 
+resource "kubernetes_config_map" "delugevpn_env_config_map" {
+  metadata {
+    name = "delugevpn-env-config-map"
+  }
+
+  data = {
+    "VPN_ENABLED"                  = "yes"
+    "VPN_PROV"                     = "pia"
+    "VPN_CLIENT"                   = "openvpn"
+    "VPN_USER"                     = var.delugevpn_vpn_user
+    "VPN_PASS"                     = var.delugevpn_vpn_password
+    "ENABLE_PRIVOXY"               = "no"
+    "STRICT_PORT_FORWARD"          = "yes"
+    "LAN_NETWORK"                  = "192.168.0.0/24"
+    "NAME_SERVERS"                 = "84.200.69.80,37.235.1.174,1.1.1.1,37.235.1.177,84.200.70.40,1.0.0.1"
+    "DEBUG"                        = "false"
+    "DELUGE_DAEMON_LOG_LEVEL"      = "info"
+    "DELUGE_WEB_LOG_LEVEL"         = "info"
+    "DELUGE_ENABLE_WEBUI_PASSWORD" = "yes"
+    "UMASK"                        = "000"
+    "PUID"                         = var.local_uid
+    "PGID"                         = var.local_gid
+    "TZ"                           = "America/Denver"
+  }
+}
+
+#####################################################################################################################
+
 resource "kubernetes_service" "delugevpn" {
   metadata {
     name = "delugevpn-service"
@@ -165,4 +114,10 @@ resource "kubernetes_service" "delugevpn" {
       target_port = 8112
     }
   }
+}
+
+#####################################################################################################################
+
+output "delugevpn_service_port" {
+  value = kubernetes_service.delugevpn.spec.0.port.0.port
 }

@@ -1,8 +1,8 @@
 resource "kubernetes_deployment" "plex" {
   metadata {
-    name = "plex"
+    name = var.app_name
     labels = {
-      app = "plex"
+      app = var.app_name
     }
   }
 
@@ -11,14 +11,14 @@ resource "kubernetes_deployment" "plex" {
 
     selector {
       match_labels = {
-        app = "plex"
+        app = var.app_name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "plex"
+          app = var.app_name
         }
       }
 
@@ -35,8 +35,8 @@ resource "kubernetes_deployment" "plex" {
         }
 
         container {
-          name  = "plex"
-          image = "plexinc/pms-docker:latest"
+          name              = var.app_name
+          image             = "plexinc/pms-docker:latest"
           image_pull_policy = "Always"
 
           readiness_probe {
@@ -46,14 +46,10 @@ resource "kubernetes_deployment" "plex" {
             }
           }
 
-          env {
-            name  = "ADVERTISE_IP"
-            value = "http://${var.local_ip}:32400/"
-          }
-
-          env {
-            name  = "TZ"
-            value = "America/Denver"
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.plex_env_config_map.metadata.0.name
+            }
           }
 
           dynamic "volume_mount" {
@@ -67,7 +63,6 @@ resource "kubernetes_deployment" "plex" {
 
           port {
             container_port = 32400
-            protocol       = "TCP"
           }
         }
       }
@@ -77,14 +72,27 @@ resource "kubernetes_deployment" "plex" {
 
 #####################################################################################################################
 
+resource "kubernetes_config_map" "plex_env_config_map" {
+  metadata {
+    name = "${var.app_name}-env-config-map"
+  }
+
+  data = {
+    "ADVERTISE_IP" = "http://${var.local_ip}:32400/"
+    "TZ"           = "America/Denver"
+  }
+}
+
+#####################################################################################################################
+
 resource "kubernetes_service" "plex" {
   metadata {
-    name = "plex-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
     selector = {
-      app = "plex"
+      app = var.app_name
     }
 
     port {
@@ -92,4 +100,10 @@ resource "kubernetes_service" "plex" {
       target_port = 32400
     }
   }
+}
+
+#####################################################################################################################
+
+output "plex_service_port" {
+  value = kubernetes_service.plex.spec.0.port.0.port
 }

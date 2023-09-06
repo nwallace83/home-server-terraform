@@ -41,6 +41,12 @@ variable "ingress_namespace" {
   description = "Namespace for kubernetes ingress"
 }
 
+variable "timezone" {
+  type = string
+  default = "America/Denver"
+  description = "Timezone for containers - default America/Denver"
+}
+
 #####################################################################################################################
 
 variable "plex_volumes" {

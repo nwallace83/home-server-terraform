@@ -73,5 +73,14 @@ module "pihole" {
 module "ingress" {
   source = "./ingress"
 
-  ingress_namespace = var.ingress_namespace
+  ingress_namespace        = var.ingress_namespace
+  delugevpn_service_port   = module.delugevpn.delugevpn_service_port
+  handbrake_service_port   = module.handbrake.handbrake_service_port
+  pihole_http_service_port = module.pihole.pihole_http_service_port
+  plex_service_port        = module.plex.plex_service_port
+  prowlarr_service_port    = module.prowlarr.prowlarr_service_port
+  radarr_service_port      = module.radarr.radarr_service_port
+  sickchill_service_port   = module.sickchill.sickchill_service_port
 }
+
+#####################################################################################################################
