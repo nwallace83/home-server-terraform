@@ -1,8 +1,7 @@
 resource "kubernetes_ingress_v1" "nginx_ingress" {
   metadata {
-    name = "nginx-ingress"
+    name = "pihole-ingress"
     annotations = {
-      "kubernetes.io/ingress.class"                        = "nginx"
       "nginx.ingress.kubernetes.io/affinity"               = "cookie"
       "nginx.ingress.kubernetes.io/session-cookie-name"    = "route"
       "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
@@ -10,6 +9,7 @@ resource "kubernetes_ingress_v1" "nginx_ingress" {
   }
 
   spec {
+    ingress_class_name = "nginx"
     default_backend {
       service {
         name = "pihole-http-service"
