@@ -85,6 +85,37 @@ resource "kubernetes_config_map" "plex_env_config_map" {
 
 #####################################################################################################################
 
+resource "kubernetes_ingress_v1" "plex_ingress" {
+  metadata {
+    name = "${var.app_name}-ingress"
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+    
+    rule {
+      host = "${var.app_name}.${var.local_domain}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "${var.app_name}-service"
+
+              port {
+                number = 32400
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#####################################################################################################################
+
 resource "kubernetes_service" "plex" {
   metadata {
     name = "${var.app_name}-service"
@@ -100,10 +131,4 @@ resource "kubernetes_service" "plex" {
       target_port = 32400
     }
   }
-}
-
-#####################################################################################################################
-
-output "plex_service_port" {
-  value = kubernetes_service.plex.spec.0.port.0.port
 }

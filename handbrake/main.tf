@@ -82,7 +82,7 @@ resource "kubernetes_service" "handbrake" {
     }
 
     port {
-      port        = 8084
+      port        = 8081
       target_port = 5800
     }
   }
@@ -90,6 +90,32 @@ resource "kubernetes_service" "handbrake" {
 
 #####################################################################################################################
 
-output "handbrake_service_port" {
-  value = kubernetes_service.handbrake.spec.0.port.0.port
+resource "kubernetes_ingress_v1" "handbrake_ingress" {
+  metadata {
+    name = "${var.app_name}-ingress"
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+
+    rule {
+      host = "${var.app_name}.${var.local_domain}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "${var.app_name}-service"
+
+              port {
+                number = 8081
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
+

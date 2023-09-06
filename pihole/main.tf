@@ -97,8 +97,6 @@ resource "kubernetes_config_map" "pihole_env_config_map" {
     "FTLCONF_LOCAL_IPV4" = var.local_ip
     "IPv6"               = "false"
     "FTLCONF_MAXDBDAYS"  = "7"
-    "FTLCONF_GRAVITYDB"  = "/etc/pihole/gravity.db"
-    "FTLCONF_DBFILE"     = "/etc/pihole/pihole-FTL.db"
   }
 }
 
@@ -148,7 +146,7 @@ resource "kubernetes_service" "pihole_http" {
 
     port {
       name        = "http"
-      port        = 80
+      port        = 8081
       target_port = 80
     }
   }
@@ -156,6 +154,36 @@ resource "kubernetes_service" "pihole_http" {
 
 #####################################################################################################################
 
-output "pihole_http_service_port" {
-  value = kubernetes_service.pihole_http.spec.0.port.0.port
+resource "kubernetes_ingress_v1" "pihole_ingress" {
+  metadata {
+    name = "pihole-ingress"
+    annotations = {
+      "nginx.ingress.kubernetes.io/affinity"               = "cookie"
+      "nginx.ingress.kubernetes.io/session-cookie-name"    = "route"
+      "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
+    }
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+
+    rule {
+      host = "${var.app_name}.${var.local_domain}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "pihole-http-service"
+
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

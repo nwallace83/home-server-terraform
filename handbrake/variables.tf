@@ -7,6 +7,10 @@ variable "timezone" {
   type = string
 }
 
+variable "local_domain" {
+  type = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

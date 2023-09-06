@@ -47,6 +47,12 @@ variable "timezone" {
   description = "Timezone for containers - default America/Denver"
 }
 
+variable "local_domain" {
+  type        = string
+  default     = "local"
+  description = "Domain for ingress' - default local"
+}
+
 #####################################################################################################################
 
 variable "plex_volumes" {

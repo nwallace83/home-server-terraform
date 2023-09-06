@@ -105,6 +105,31 @@ resource "kubernetes_service" "sickchill" {
 
 #####################################################################################################################
 
-output "sickchill_service_port" {
-  value = kubernetes_service.sickchill.spec.0.port.0.port
+resource "kubernetes_ingress_v1" "sickchill_ingress" {
+  metadata {
+    name = "${var.app_name}-ingress"
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+
+    rule {
+      host = "${var.app_name}.${var.local_domain}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "${var.app_name}-service"
+
+              port {
+                number = 8081
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

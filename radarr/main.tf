@@ -97,7 +97,7 @@ resource "kubernetes_service" "radarr" {
     }
 
     port {
-      port        = 8082
+      port        = 8081
       target_port = 7878
     }
   }
@@ -105,6 +105,32 @@ resource "kubernetes_service" "radarr" {
 
 #####################################################################################################################
 
-output "radarr_service_port" {
-  value = kubernetes_service.radarr.spec.0.port.0.port
+resource "kubernetes_ingress_v1" "radarr_ingress" {
+  metadata {
+    name = "${var.app_name}-ingress"
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+
+    rule {
+      host = "${var.app_name}.${var.local_domain}"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "${var.app_name}-service"
+
+              port {
+                number = 8081
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
+
