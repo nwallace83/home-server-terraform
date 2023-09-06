@@ -4,6 +4,7 @@ module "sickchill" {
   volumes   = var.sickchill_volumes
   local_uid = var.local_uid
   local_gid = var.local_gid
+  timezone  = var.timezone
 }
 
 #####################################################################################################################
@@ -14,6 +15,7 @@ module "radarr" {
   volumes   = var.radarr_volumes
   local_uid = var.local_uid
   local_gid = var.local_gid
+  timezone  = var.timezone
 }
 
 #####################################################################################################################
@@ -24,6 +26,7 @@ module "prowlarr" {
   volumes   = var.prowlarr_volumes
   local_uid = var.local_uid
   local_gid = var.local_gid
+  timezone  = var.timezone
 }
 
 #####################################################################################################################
@@ -36,6 +39,7 @@ module "delugevpn" {
   local_gid              = var.local_gid
   delugevpn_vpn_password = var.delugevpn_vpn_password
   delugevpn_vpn_user     = var.delugevpn_vpn_user
+  timezone               = var.timezone
 }
 
 #####################################################################################################################
@@ -45,6 +49,7 @@ module "plex" {
 
   volumes  = var.plex_volumes
   local_ip = var.local_ip
+  timezone = var.timezone
 }
 
 #####################################################################################################################
@@ -52,7 +57,8 @@ module "plex" {
 module "handbrake" {
   source = "./handbrake"
 
-  volumes = var.plex_volumes
+  volumes  = var.plex_volumes
+  timezone = var.timezone
 }
 
 #####################################################################################################################
@@ -66,6 +72,7 @@ module "pihole" {
   local_gid          = var.local_gid
   pihole_dns_origins = var.pihole_dns_origins
   password           = var.password
+  timezone           = var.timezone
 }
 
 #####################################################################################################################

@@ -93,7 +93,7 @@ resource "kubernetes_config_map" "delugevpn_env_config_map" {
     "UMASK"                        = "000"
     "PUID"                         = var.local_uid
     "PGID"                         = var.local_gid
-    "TZ"                           = "America/Denver"
+    "TZ"                           = var.timezone
   }
 }
 

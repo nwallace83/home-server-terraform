@@ -11,6 +11,10 @@ variable "app_name" {
   default = "radarr"
 }
 
+variable "timezone" {
+  type = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

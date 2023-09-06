@@ -3,6 +3,10 @@ variable "app_name" {
   default = "handbrake"
 }
 
+variable "timezone" {
+  type = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

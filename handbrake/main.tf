@@ -48,7 +48,7 @@ resource "kubernetes_deployment" "handbrake" {
 
           env {
             name  = "TZ"
-            value = "America/Denver"
+            value = var.timezone
           }
 
           dynamic "volume_mount" {

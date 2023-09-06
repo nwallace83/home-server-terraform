@@ -79,7 +79,7 @@ resource "kubernetes_config_map" "plex_env_config_map" {
 
   data = {
     "ADVERTISE_IP" = "http://${var.local_ip}:32400/"
-    "TZ"           = "America/Denver"
+    "TZ"           = var.timezone
   }
 }
 

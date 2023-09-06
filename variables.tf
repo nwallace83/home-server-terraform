@@ -36,14 +36,14 @@ variable "password" {
 }
 
 variable "ingress_namespace" {
-  type = string
-  default = "ingress"
+  type        = string
+  default     = "ingress"
   description = "Namespace for kubernetes ingress"
 }
 
 variable "timezone" {
-  type = string
-  default = "America/Denver"
+  type        = string
+  default     = "America/Denver"
   description = "Timezone for containers - default America/Denver"
 }
 

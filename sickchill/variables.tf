@@ -11,6 +11,10 @@ variable "app_name" {
   default = "sickchill"
 }
 
+variable "timezone" {
+  type = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

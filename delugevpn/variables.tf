@@ -19,6 +19,10 @@ variable "app_name" {
   default = "delugevpn"
 }
 
+variable "timezone" {
+  type = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

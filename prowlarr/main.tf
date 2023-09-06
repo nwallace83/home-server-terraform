@@ -80,7 +80,7 @@ resource "kubernetes_config_map" "prowlarr_env_config_map" {
   data = {
     "PUID" = var.local_uid
     "PGID" = var.local_gid
-    "TZ"   = "America/Denver"
+    "TZ"   = var.timezone
   }
 }
 

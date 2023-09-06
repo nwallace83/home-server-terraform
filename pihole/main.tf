@@ -88,7 +88,7 @@ resource "kubernetes_config_map" "pihole_env_config_map" {
   }
 
   data = {
-    "TZ"                 = "America/Denver"
+    "TZ"                 = var.timezone
     "PIHOLE_UID"         = var.local_uid
     "PIHOLE_GID"         = var.local_gid
     "WEBPASSWORD"        = var.password
