@@ -158,6 +158,8 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
   metadata {
     name = "pihole-ingress"
     annotations = {
+      "nginx.ingress.kubernetes.io/configuration-snippet" = "if ($uri = /) {return 302 /admin;}"
+      "nginx.ingress.kubernetes.io/use-regex" = "true"
       "nginx.ingress.kubernetes.io/affinity"               = "cookie"
       "nginx.ingress.kubernetes.io/session-cookie-name"    = "route"
       "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
@@ -171,7 +173,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
       host = "${var.app_name}.${var.local_domain}"
       http {
         path {
-          path      = "/"
+          path      = "/(.*)"
           path_type = "Prefix"
           backend {
             service {
@@ -189,7 +191,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
     rule {
       http {
         path {
-          path      = "/"
+          path      = "/(.*)"
           path_type = "Prefix"
           backend {
             service {
