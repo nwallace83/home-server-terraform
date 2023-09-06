@@ -178,7 +178,25 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
               name = "pihole-http-service"
 
               port {
-                number = 80
+                number = 8081
+              }
+            }
+          }
+        }
+      }
+    }
+
+    rule {
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = "pihole-http-service"
+
+              port {
+                number = 8081
               }
             }
           }
