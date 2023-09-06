@@ -10,6 +10,14 @@ variable "password" {
   type = string
 }
 
+variable "local_uid" {
+  type = number
+}
+
+variable "local_gid" {
+  type = number
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

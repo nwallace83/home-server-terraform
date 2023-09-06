@@ -43,7 +43,7 @@ module "delugevpn" {
 module "plex" {
   source = "./plex"
 
-  volumes = var.plex_volumes
+  volumes  = var.plex_volumes
   local_ip = var.local_ip
 }
 
@@ -62,6 +62,8 @@ module "pihole" {
 
   volumes            = var.pihole_volumes
   local_ip           = var.local_ip
+  local_uid          = var.local_uid
+  local_gid          = var.local_gid
   pihole_dns_origins = var.pihole_dns_origins
   password           = var.password
 }

@@ -52,6 +52,16 @@ resource "kubernetes_deployment" "pihole" {
           }
 
           env {
+            name = "PIHOLE_UID"
+            value = var.local_uid
+          }
+
+          env {
+            name = "PIHOLE_GID"
+            value = var.local_gid
+          }
+
+          env {
             name  = "WEBPASSWORD"
             value = var.password
           }
