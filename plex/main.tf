@@ -78,8 +78,48 @@ resource "kubernetes_config_map" "plex_env_config_map" {
   }
 
   data = {
-    "ADVERTISE_IP" = "http://${var.local_ip}:32400/,http://${var.app_name}.${var.local_domain}:32400"
+    "ADVERTISE_IP" = "http://${var.local_ip}:32400/,http://${var.app_name}.${var.local_domain}:32400,http://${var.app_name}.${var.local_domain}"
     "TZ"           = var.timezone
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_service" "plex-http" {
+  metadata {
+    name = "${var.app_name}-http-service"
+  }
+
+  spec {
+    selector = {
+      app = var.app_name
+    }
+
+    port {
+      name        = "plex-internal"
+      port        = 80
+      target_port = 32400
+    }
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_service" "plex-tcp" {
+  metadata {
+    name = "${var.app_name}-tcp-service"
+  }
+
+  spec {
+    selector = {
+      app = var.app_name
+    }
+
+    port {
+      name        = "plex-external"
+      port        = 32400
+      target_port = 32400
+    }
   }
 }
 
@@ -118,46 +158,6 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
           }
         }
       }
-    }
-  }
-}
-
-#####################################################################################################################
-
-resource "kubernetes_service" "plex-http" {
-  metadata {
-    name = "${var.app_name}-http-service"
-  }
-
-  spec {
-    selector = {
-      app = var.app_name
-    }
-
-    port {
-      name        = "plex-internal"
-      port        = 80
-      target_port = 32400
-    }
-  }
-}
-
-#####################################################################################################################
-
-resource "kubernetes_service" "plex" {
-  metadata {
-    name = "${var.app_name}-tcp-service"
-  }
-
-  spec {
-    selector = {
-      app = var.app_name
-    }
-
-    port {
-      name        = "plex-external"
-      port        = 32400
-      target_port = 32400
     }
   }
 }

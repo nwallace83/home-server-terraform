@@ -9,6 +9,9 @@ resource "kubernetes_config_map" "tcp_services" {
     "53"    = "default/pihole-dns-service:53"
     "32400" = "default/plex-tcp-service:32400"
     "8112"  = "default/delugevpn-service:8112"
+    "8081"  = "default/sickchill-tcp-service:8081"
+    "8082"  = "default/radarr-tcp-service:8082"
+    "8083"  = "default/prowlarr-tcp-service:8083"
   }
 }
 

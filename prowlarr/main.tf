@@ -86,9 +86,9 @@ resource "kubernetes_config_map" "prowlarr_env_config_map" {
 
 #####################################################################################################################
 
-resource "kubernetes_service" "prowlarr" {
+resource "kubernetes_service" "prowlarr-http" {
   metadata {
-    name = "${var.app_name}-service"
+    name = "${var.app_name}-http-service"
   }
 
   spec {
@@ -98,6 +98,25 @@ resource "kubernetes_service" "prowlarr" {
 
     port {
       port        = 80
+      target_port = 9696
+    }
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_service" "prowlarr-tcp" {
+  metadata {
+    name = "${var.app_name}-tcp-service"
+  }
+
+  spec {
+    selector = {
+      app = var.app_name
+    }
+
+    port {
+      port        = 8083
       target_port = 9696
     }
   }
