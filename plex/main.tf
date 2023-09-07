@@ -135,7 +135,14 @@ resource "kubernetes_service" "plex" {
     }
 
     port {
+      name = "plex-external-http"
       port        = 32400
+      target_port = 32400
+    }
+
+    port {
+      name = "plex-internal-http"
+      port = 80
       target_port = 32400
     }
   }
