@@ -88,6 +88,9 @@ resource "kubernetes_config_map" "plex_env_config_map" {
 resource "kubernetes_ingress_v1" "plex_ingress" {
   metadata {
     name = "${var.app_name}-ingress"
+    annotations = {
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+    }
   }
 
   spec {

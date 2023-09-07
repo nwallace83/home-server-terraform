@@ -94,7 +94,7 @@ resource "kubernetes_ingress_v1" "handbrake_ingress" {
   metadata {
     name = "${var.app_name}-ingress"
     annotations = {
-      "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
     }
   }
 

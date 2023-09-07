@@ -158,7 +158,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
   metadata {
     name = "pihole-ingress"
     annotations = {
-      "nginx.ingress.kubernetes.io/ssl-redirect"           = "false"
+      "nginx.ingress.kubernetes.io/ssl-redirect"           = "true"
       "nginx.ingress.kubernetes.io/configuration-snippet"  = "if ($uri = /) {return 302 /admin;}"
       "nginx.ingress.kubernetes.io/use-regex"              = "true"
       "nginx.ingress.kubernetes.io/affinity"               = "cookie"
