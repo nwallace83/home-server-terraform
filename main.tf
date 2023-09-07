@@ -94,9 +94,9 @@ module "pihole" {
 module "ingress_tcp_udp" {
   source = "./ingress-tcp-udp"
 
-  ingress_namespace = var.ingress_namespace
-  tls_certificate   = var.tls_certificate
-  tls_key           = var.tls_key
+  ingress_namespace  = var.ingress_namespace
+  tls_certificate    = var.tls_certificate
+  tls_key            = var.tls_key
 }
 
 #####################################################################################################################
