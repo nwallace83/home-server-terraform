@@ -109,7 +109,7 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
           path_type = "Prefix"
           backend {
             service {
-              name = "${var.app_name}-service"
+              name = "${var.app_name}-http-service"
 
               port {
                 number = 80
@@ -124,9 +124,9 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
 
 #####################################################################################################################
 
-resource "kubernetes_service" "plex" {
+resource "kubernetes_service" "plex-http" {
   metadata {
-    name = "${var.app_name}-service"
+    name = "${var.app_name}-http-service"
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
     }
@@ -138,14 +138,29 @@ resource "kubernetes_service" "plex" {
     }
 
     port {
-      name = "plex-external-http"
-      port        = 32400
+      port = 80
       target_port = 32400
+    }
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_service" "plex-tcp" {
+  metadata {
+    name = "${var.app_name}-tcp-service"
+    annotations = {
+      "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
+    }
+  }
+
+  spec {
+    selector = {
+      app = var.app_name
     }
 
     port {
-      name = "plex-internal-http"
-      port = 80
+      port        = 32400
       target_port = 32400
     }
   }

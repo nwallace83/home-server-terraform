@@ -7,7 +7,7 @@ resource "kubernetes_config_map" "tcp_services" {
 
   data = {
     "53"    = "default/pihole-dns-service:53"
-    "32400" = "default/plex-service:32400"
+    "32400" = "default/plex-tcp-service:32400"
     "8112"  = "default/delugevpn-service:8112"
   }
 }
@@ -29,6 +29,7 @@ resource "kubernetes_secret" "local_tls_secret" {
   metadata {
     name = "local-tls-secret"
   }
+  
   type = "kubernetes.io/tls"
 
   data = {
