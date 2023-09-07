@@ -109,7 +109,7 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
               name = "${var.app_name}-service"
 
               port {
-                number = 32400
+                number = 80
               }
             }
           }
