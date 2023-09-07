@@ -78,7 +78,7 @@ resource "kubernetes_config_map" "plex_env_config_map" {
   }
 
   data = {
-    "ADVERTISE_IP" = "http://${var.local_ip}:32400/"
+    "ADVERTISE_IP" = "http://${var.local_ip}:32400/,http://${var.app_name}.${var.local_domain}:32400"
     "TZ"           = var.timezone
   }
 }
@@ -97,10 +97,10 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
     ingress_class_name = "nginx"
 
     tls {
-      hosts = [ "${var.app_name}.${var.local_domain}" ]
+      hosts       = ["${var.app_name}.${var.local_domain}"]
       secret_name = var.local_tls_secret_name
     }
-    
+
     rule {
       host = "${var.app_name}.${var.local_domain}"
       http {
@@ -127,9 +127,6 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
 resource "kubernetes_service" "plex-http" {
   metadata {
     name = "${var.app_name}-http-service"
-    annotations = {
-      "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
-    }
   }
 
   spec {
@@ -138,7 +135,8 @@ resource "kubernetes_service" "plex-http" {
     }
 
     port {
-      port = 80
+      name        = "plex-internal"
+      port        = 80
       target_port = 32400
     }
   }
@@ -146,12 +144,9 @@ resource "kubernetes_service" "plex-http" {
 
 #####################################################################################################################
 
-resource "kubernetes_service" "plex-tcp" {
+resource "kubernetes_service" "plex" {
   metadata {
     name = "${var.app_name}-tcp-service"
-    annotations = {
-      "nginx.ingress.kubernetes.io/ssl-redirect" = "false"
-    }
   }
 
   spec {
@@ -160,6 +155,7 @@ resource "kubernetes_service" "plex-tcp" {
     }
 
     port {
+      name        = "plex-external"
       port        = 32400
       target_port = 32400
     }

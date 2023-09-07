@@ -29,7 +29,7 @@ resource "kubernetes_secret" "local_tls_secret" {
   metadata {
     name = "local-tls-secret"
   }
-  
+
   type = "kubernetes.io/tls"
 
   data = {
