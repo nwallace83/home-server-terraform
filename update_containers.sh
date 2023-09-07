@@ -1,12 +1,15 @@
 #!/bin/bash -x
 
-echo "Start time: `date`"
+echo "Start time: $(date)"
 
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 cd $SCRIPT_DIR
+
+git checkout .terraform.lock.hcl
+git pull
 
 kubectl rollout restart deployment handbrake
 kubectl rollout restart deployment sickchill
@@ -16,4 +19,4 @@ kubectl rollout restart deployment pihole
 kubectl rollout restart deployment prowlarr
 kubectl rollout restart deployment radarr
 
-echo "End time: `date`"
+echo "End time: $(date)"
