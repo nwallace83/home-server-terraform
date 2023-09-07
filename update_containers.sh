@@ -11,6 +11,9 @@ cd $SCRIPT_DIR
 git checkout .terraform.lock.hcl
 git pull
 
+terraform init
+terraform apply -auto-approve
+
 kubectl rollout restart deployment handbrake
 kubectl rollout restart deployment sickchill
 kubectl rollout restart deployment delugevpn
