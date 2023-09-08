@@ -74,13 +74,11 @@ resource "kubernetes_deployment" "pihole" {
           volume_mount {
             name       = "etc-pihole"
             mount_path = "/etc/pihole"
-            sub_path   = "custom.list"
           }
 
           volume_mount {
             name       = "etc-dnsmasq-d"
             mount_path = "/etc/dnsmasq.d"
-            sub_path   = "custom.list"
           }
 
           volume_mount {
