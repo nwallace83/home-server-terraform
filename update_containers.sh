@@ -18,7 +18,7 @@ kubectl rollout restart deployment handbrake
 kubectl rollout restart deployment sickchill
 kubectl rollout restart deployment delugevpn
 kubectl rollout restart deployment plex
-kubectl rollout restart deployment pihole
+#kubectl rollout restart deployment pihole
 kubectl rollout restart deployment prowlarr
 kubectl rollout restart deployment radarr
 
