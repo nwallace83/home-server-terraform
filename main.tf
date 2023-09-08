@@ -75,6 +75,23 @@ module "handbrake" {
 
 #####################################################################################################################
 
+module "dashboard" {
+  source = "./dashboard"
+
+  local_domain        = var.local_domain
+  tls_certificate     = var.tls_certificate
+  tls_key             = var.tls_key
+  dashboard_namespace = var.dashboard_namespace
+}
+
+#####################################################################################################################
+
+module "service_account" {
+  source = "./service-account"
+}
+
+#####################################################################################################################
+
 module "pihole" {
   source = "./pihole"
 
@@ -94,9 +111,9 @@ module "pihole" {
 module "ingress_tcp_udp" {
   source = "./ingress-tcp-udp"
 
-  ingress_namespace  = var.ingress_namespace
-  tls_certificate    = var.tls_certificate
-  tls_key            = var.tls_key
+  ingress_namespace = var.ingress_namespace
+  tls_certificate   = var.tls_certificate
+  tls_key           = var.tls_key
 }
 
 #####################################################################################################################
