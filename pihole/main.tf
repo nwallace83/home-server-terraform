@@ -9,6 +9,14 @@ resource "kubernetes_deployment" "pihole" {
   spec {
     replicas = 2
 
+    strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        max_surge       = 2
+        max_unavailable = 1
+      }
+    }
+
     revision_history_limit = 0
     selector {
       match_labels = {

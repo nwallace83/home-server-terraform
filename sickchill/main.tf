@@ -15,6 +15,14 @@ resource "kubernetes_deployment" "sickchill" {
       }
     }
 
+    strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        max_surge       = 1
+        max_unavailable = 0
+      }
+    }
+
     revision_history_limit = 0
     template {
       metadata {

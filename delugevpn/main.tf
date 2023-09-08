@@ -9,6 +9,14 @@ resource "kubernetes_deployment" "delugevpn" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        max_surge       = 1
+        max_unavailable = 0
+      }
+    }
+
     revision_history_limit = 0
     selector {
       match_labels = {

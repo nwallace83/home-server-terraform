@@ -9,6 +9,14 @@ resource "kubernetes_deployment" "handbrake" {
   spec {
     replicas = 1
 
+    strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        max_surge       = 1
+        max_unavailable = 0
+      }
+    }
+
     revision_history_limit = 0
     selector {
       match_labels = {
@@ -36,8 +44,8 @@ resource "kubernetes_deployment" "handbrake" {
         }
 
         container {
-          name  = var.app_name
-          image = "jlesage/handbrake:latest"
+          name              = var.app_name
+          image             = "jlesage/handbrake:latest"
           image_pull_policy = "Always"
 
           readiness_probe {
@@ -103,7 +111,7 @@ resource "kubernetes_ingress_v1" "handbrake_ingress" {
     ingress_class_name = "nginx"
 
     tls {
-      hosts = [ "${var.app_name}.${var.local_domain}" ]
+      hosts       = ["${var.app_name}.${var.local_domain}"]
       secret_name = var.local_tls_secret_name
     }
 
