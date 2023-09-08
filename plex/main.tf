@@ -98,7 +98,6 @@ resource "kubernetes_service" "plex-http" {
     }
 
     port {
-      name        = "plex-internal"
       port        = 80
       target_port = 32400
     }
@@ -117,8 +116,9 @@ resource "kubernetes_service" "plex-tcp" {
       app = var.app_name
     }
 
+    type = "NodePort"
     port {
-      name        = "plex-external"
+      node_port   = 32400
       port        = 32400
       target_port = 32400
     }
