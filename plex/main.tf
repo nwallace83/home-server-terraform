@@ -6,9 +6,11 @@ resource "kubernetes_deployment" "plex" {
     }
   }
 
+
   spec {
     replicas = 1
 
+    revision_history_limit = 0
     selector {
       match_labels = {
         app = var.app_name

@@ -15,6 +15,7 @@ resource "kubernetes_deployment" "sickchill" {
       }
     }
 
+    revision_history_limit = 0
     template {
       metadata {
         labels = {
