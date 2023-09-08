@@ -8,7 +8,7 @@ variable "local_domain" {
 }
 
 variable "dashboard_namespace" {
-  type        = string
+  type = string
 }
 
 variable "tls_certificate" {

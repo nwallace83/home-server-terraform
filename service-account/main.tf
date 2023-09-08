@@ -16,7 +16,7 @@ resource "kubernetes_service_account" "admin_service_account" {
     name = "admin"
   }
   secret {
-    name = kubernetes_secret.admin_service_account_secret.metadata.0.name
+    name = "admin-service-account-secret"
   }
 }
 
