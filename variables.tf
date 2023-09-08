@@ -60,15 +60,21 @@ variable "local_domain" {
 }
 
 variable "tls_certificate" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Base 64 encoded tls certificate"
 }
 
 variable "tls_key" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Base 64 encoded tls key"
+}
+
+variable "pihole_custom_list" {
+  type        = string
+  default     = ""
+  description = "Contents of custom.list file for local dns lookups"
 }
 
 #####################################################################################################################
@@ -143,16 +149,4 @@ variable "sickchill_volumes" {
   }))
   default     = []
   description = "List of docker volumes to be mounted by sickchill"
-}
-
-variable "pihole_volumes" {
-  type = list(object({
-    name           = string
-    container_path = string
-    host_path      = string
-    read_only      = optional(bool, false)
-    type           = optional(string, "DirectoryOrCreate")
-  }))
-  default     = []
-  description = "List of docker volumes to be mounted by pihole"
 }

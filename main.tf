@@ -97,7 +97,6 @@ module "service_account" {
 module "pihole" {
   source = "./pihole"
 
-  volumes               = var.pihole_volumes
   local_ip              = var.local_ip
   local_uid             = var.local_uid
   local_gid             = var.local_gid
@@ -105,6 +104,7 @@ module "pihole" {
   password              = var.password
   timezone              = var.timezone
   local_domain          = var.local_domain
+  pihole_custom_list    = var.pihole_custom_list
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 

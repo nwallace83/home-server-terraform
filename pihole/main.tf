@@ -7,17 +7,17 @@ resource "kubernetes_deployment" "pihole" {
   }
 
   spec {
-    replicas = 2
+    replicas               = 2
+    revision_history_limit = 0
 
     strategy {
       type = "RollingUpdate"
       rolling_update {
-        max_surge       = 1
-        max_unavailable = 1
+        max_surge       = 2
+        max_unavailable = 0
       }
     }
 
-    revision_history_limit = 0
     selector {
       match_labels = {
         app = var.app_name
@@ -32,14 +32,30 @@ resource "kubernetes_deployment" "pihole" {
       }
 
       spec {
-        dynamic "volume" {
-          for_each = var.volumes
-          content {
-            name = volume.value.name
-            host_path {
-              path = volume.value.host_path
-              type = volume.value.type
+        volume {
+          name = "custom-list"
+          config_map {
+            name = kubernetes_config_map.pihole_custom_list_map.metadata.0.name
+            items {
+              key  = "custom.list"
+              path = "custom.list"
             }
+          }
+        }
+
+        volume {
+          name = "etc-pihole"
+          empty_dir {
+            medium     = "Memory"
+            size_limit = "1Gi"
+          }
+        }
+
+        volume {
+          name = "etc-dnsmasq-d"
+          empty_dir {
+            medium     = "Memory"
+            size_limit = "512Mi"
           }
         }
 
@@ -48,7 +64,6 @@ resource "kubernetes_deployment" "pihole" {
           image             = "pihole/pihole:latest"
           image_pull_policy = "Always"
 
-
           readiness_probe {
             http_get {
               path = "/admin"
@@ -56,18 +71,38 @@ resource "kubernetes_deployment" "pihole" {
             }
           }
 
+          volume_mount {
+            name       = "etc-pihole"
+            mount_path = "/etc/pihole"
+            sub_path   = "custom.list"
+          }
+
+          volume_mount {
+            name       = "etc-dnsmasq-d"
+            mount_path = "/etc/dnsmasq.d"
+            sub_path   = "custom.list"
+          }
+
+          volume_mount {
+            name       = "custom-list"
+            mount_path = "/etc/pihole/custom.list"
+            sub_path   = "custom.list"
+          }
+
           env_from {
             config_map_ref {
               name = kubernetes_config_map.pihole_env_config_map.metadata.0.name
+
             }
           }
 
-          dynamic "volume_mount" {
-            for_each = var.volumes
-            content {
-              name       = volume_mount.value.name
-              mount_path = volume_mount.value.container_path
-              read_only  = volume_mount.value.read_only
+          lifecycle {
+            post_start {
+              exec {
+                command = [
+                  "sh", "-c", "sleep 5 && sqlite3 /etc/pihole/gravity.db \"INSERT INTO adlist (address, enabled, comment) VALUES ('https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt', 1, '');\" && sqlite3 /etc/pihole/gravity.db \"INSERT INTO adlist (address, enabled, comment) VALUES ('https://dbl.oisd.nl', 1, '');\" && pihole updateGravity"
+                ]
+              }
             }
           }
 
@@ -107,6 +142,18 @@ resource "kubernetes_config_map" "pihole_env_config_map" {
     "FTLCONF_LOCAL_IPV4" = var.local_ip
     "IPv6"               = "false"
     "FTLCONF_MAXDBDAYS"  = "7"
+  }
+}
+
+#####################################################################################################################
+
+resource "kubernetes_config_map" "pihole_custom_list_map" {
+  metadata {
+    name = "pihole-custom-list-map"
+  }
+
+  data = {
+    "custom.list" = base64decode(var.pihole_custom_list)
   }
 }
 
