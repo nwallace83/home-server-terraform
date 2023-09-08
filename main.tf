@@ -88,6 +88,8 @@ module "dashboard" {
 
 module "service_account" {
   source = "./service-account"
+
+  dashboard_namespace = var.dashboard_namespace
 }
 
 #####################################################################################################################
