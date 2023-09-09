@@ -6,7 +6,6 @@ resource "kubernetes_deployment" "plex" {
     }
   }
 
-
   spec {
     replicas = 1
 
