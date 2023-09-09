@@ -71,6 +71,13 @@ resource "kubernetes_deployment" "pihole" {
             }
           }
 
+          liveness_probe {
+            http_get {
+              path = "/admin"
+              port = 80
+            }
+          }
+
           volume_mount {
             name       = "etc-pihole"
             mount_path = "/etc/pihole"

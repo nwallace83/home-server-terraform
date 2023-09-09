@@ -55,6 +55,13 @@ resource "kubernetes_deployment" "prowlarr" {
             }
           }
 
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 9696
+            }
+          }
+
           env_from {
             config_map_ref {
               name = kubernetes_config_map.prowlarr_env_config_map.metadata.0.name

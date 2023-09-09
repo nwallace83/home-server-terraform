@@ -56,6 +56,13 @@ resource "kubernetes_deployment" "plex" {
             }
           }
 
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 32400
+            }
+          }
+
           env_from {
             config_map_ref {
               name = kubernetes_config_map.plex_env_config_map.metadata.0.name

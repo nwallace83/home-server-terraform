@@ -55,6 +55,13 @@ resource "kubernetes_deployment" "sickchill" {
             }
           }
 
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 8081
+            }
+          }
+
           env_from {
             config_map_ref {
               name = kubernetes_config_map.sickchill_env_config_map.metadata.0.name

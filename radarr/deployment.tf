@@ -55,6 +55,13 @@ resource "kubernetes_deployment" "radarr" {
             }
           }
 
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 7878
+            }
+          }
+
           env_from {
             config_map_ref {
               name = kubernetes_config_map.radarr_env_config_map.metadata.0.name

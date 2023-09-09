@@ -55,6 +55,13 @@ resource "kubernetes_deployment" "handbrake" {
             }
           }
 
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 5800
+            }
+          }
+
           env {
             name  = "TZ"
             value = var.timezone
