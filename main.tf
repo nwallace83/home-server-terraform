@@ -78,22 +78,9 @@ module "handbrake" {
 module "dashboard" {
   source = "./dashboard"
 
-  local_domain        = var.local_domain
   tls_certificate     = var.tls_certificate
   tls_key             = var.tls_key
   dashboard_namespace = var.dashboard_namespace
-}
-
-#####################################################################################################################
-
-module "prometheus" {
-  source = "./prometheus"
-}
-
-#####################################################################################################################
-
-module "kube-state-metrics" {
-  source = "./kube-state-metrics"
 }
 
 #####################################################################################################################

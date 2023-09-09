@@ -1,12 +1,3 @@
-variable "app_name" {
-  type    = string
-  default = "dashboard"
-}
-
-variable "local_domain" {
-  type = string
-}
-
 variable "dashboard_namespace" {
   type = string
 }
