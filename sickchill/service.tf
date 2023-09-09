@@ -1,6 +1,6 @@
-resource "kubernetes_service" "sickchill-tcp" {
+resource "kubernetes_service" "sickchill" {
   metadata {
-    name = "${var.app_name}-tcp-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
@@ -9,25 +9,7 @@ resource "kubernetes_service" "sickchill-tcp" {
     }
 
     port {
-      port        = 8081
-      target_port = 8081
-    }
-  }
-}
-
-#####################################################################################################################
-
-resource "kubernetes_service" "sickchill-http" {
-  metadata {
-    name = "${var.app_name}-http-service"
-  }
-
-  spec {
-    selector = {
-      app = var.app_name
-    }
-
-    port {
+      name        = "http"
       port        = 80
       target_port = 8081
     }

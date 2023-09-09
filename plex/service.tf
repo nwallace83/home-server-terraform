@@ -1,6 +1,6 @@
-resource "kubernetes_service" "plex-http" {
+resource "kubernetes_service" "plex" {
   metadata {
-    name = "${var.app_name}-http-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
@@ -9,6 +9,7 @@ resource "kubernetes_service" "plex-http" {
     }
 
     port {
+      name        = "http"
       port        = 80
       target_port = 32400
     }

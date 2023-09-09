@@ -29,10 +29,10 @@ resource "kubernetes_service" "pihole_dns" {
 
 #####################################################################################################################
 
-resource "kubernetes_service" "pihole_http" {
+resource "kubernetes_service" "pihole" {
 
   metadata {
-    name = "pihole-http-service"
+    name = "pihole-service"
   }
 
   spec {
@@ -41,6 +41,7 @@ resource "kubernetes_service" "pihole_http" {
     }
 
     port {
+      name        = "http"
       port        = 80
       target_port = 80
     }

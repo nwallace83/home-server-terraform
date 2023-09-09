@@ -9,6 +9,7 @@ resource "kubernetes_service" "handbrake" {
     }
 
     port {
+      name        = "http"
       port        = 80
       target_port = 5800
     }

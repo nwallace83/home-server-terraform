@@ -1,6 +1,6 @@
-resource "kubernetes_service" "radarr-http" {
+resource "kubernetes_service" "radarr" {
   metadata {
-    name = "${var.app_name}-http-service"
+    name = "${var.app_name}-service"
   }
 
   spec {
@@ -9,26 +9,8 @@ resource "kubernetes_service" "radarr-http" {
     }
 
     port {
+      name        = "http"
       port        = 80
-      target_port = 7878
-    }
-  }
-}
-
-#####################################################################################################################
-
-resource "kubernetes_service" "radarr-tcp" {
-  metadata {
-    name = "${var.app_name}-tcp-service"
-  }
-
-  spec {
-    selector = {
-      app = var.app_name
-    }
-
-    port {
-      port        = 8082
       target_port = 7878
     }
   }
