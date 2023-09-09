@@ -1,6 +1,7 @@
 resource "kubernetes_config_map" "delugevpn_env_config_map" {
   metadata {
-    name = "delugevpn-env-config-map"
+    name      = "delugevpn-env-config-map"
+    namespace = var.namespace
   }
 
   data = {

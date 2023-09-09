@@ -1,6 +1,7 @@
 resource "kubernetes_deployment" "radarr" {
   metadata {
-    name = var.app_name
+    name      = var.app_name
+    namespace = var.namespace
     labels = {
       app = var.app_name
     }

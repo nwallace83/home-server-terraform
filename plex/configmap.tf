@@ -1,6 +1,7 @@
 resource "kubernetes_config_map" "plex_env_config_map" {
   metadata {
-    name = "${var.app_name}-env-config-map"
+    name      = "${var.app_name}-env-config-map"
+    namespace = var.namespace
   }
 
   data = {

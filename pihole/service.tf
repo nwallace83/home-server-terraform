@@ -1,6 +1,7 @@
 resource "kubernetes_service" "pihole_dns" {
   metadata {
-    name = "pihole-dns-service"
+    name      = "pihole-dns-service"
+    namespace = var.namespace
   }
 
   spec {

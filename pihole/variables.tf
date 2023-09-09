@@ -38,3 +38,7 @@ variable "local_tls_secret_name" {
 variable "pihole_custom_list" {
   type = string
 }
+
+variable "namespace" {
+  type        = string
+}

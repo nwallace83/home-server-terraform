@@ -1,6 +1,7 @@
 resource "kubernetes_service" "sickchill" {
   metadata {
-    name = "${var.app_name}-service"
+    name      = "${var.app_name}-service"
+    namespace = var.namespace
   }
 
   spec {

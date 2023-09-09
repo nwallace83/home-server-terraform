@@ -1,6 +1,7 @@
 resource "kubernetes_config_map" "pihole_env_config_map" {
   metadata {
-    name = "pihole-env-config-map"
+    name      = "pihole-env-config-map"
+    namespace = var.namespace
   }
 
   data = {
@@ -20,7 +21,8 @@ resource "kubernetes_config_map" "pihole_env_config_map" {
 
 resource "kubernetes_config_map" "pihole_custom_list_map" {
   metadata {
-    name = "pihole-custom-list-map"
+    name      = "pihole-custom-list-map"
+    namespace = var.namespace
   }
 
   data = {

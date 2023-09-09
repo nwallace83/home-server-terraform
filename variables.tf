@@ -77,6 +77,12 @@ variable "pihole_custom_list" {
   description = "Contents of custom.list file for local dns lookups"
 }
 
+variable "namespace" {
+  type        = string
+  default     = "home-server"
+  description = "Contents of custom.list file for local dns lookups"
+}
+
 #####################################################################################################################
 
 variable "plex_volumes" {

@@ -26,7 +26,8 @@ resource "kubernetes_config_map" "udp_services" {
 
 resource "kubernetes_secret" "local_tls_secret" {
   metadata {
-    name = "local-tls-secret"
+    name      = "local-tls-secret"
+    namespace = var.namespace
   }
 
   type = "kubernetes.io/tls"

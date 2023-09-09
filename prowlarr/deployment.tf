@@ -1,6 +1,7 @@
 resource "kubernetes_deployment" "prowlarr" {
   metadata {
-    name = var.app_name
+    name      = var.app_name
+    namespace = var.namespace
     labels = {
       app = "prowlarr"
     }

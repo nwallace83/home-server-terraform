@@ -19,6 +19,10 @@ variable "local_tls_secret_name" {
   type = string
 }
 
+variable "namespace" {
+  type        = string
+}
+
 variable "volumes" {
   type = list(object({
     name           = string

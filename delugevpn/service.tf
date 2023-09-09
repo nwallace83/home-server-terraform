@@ -1,6 +1,7 @@
 resource "kubernetes_service" "delugevpn" {
   metadata {
-    name = "delugevpn-service"
+    name      = "delugevpn-service"
+    namespace = var.namespace
   }
 
   spec {

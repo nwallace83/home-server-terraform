@@ -1,6 +1,7 @@
 resource "kubernetes_ingress_v1" "radarr_ingress" {
   metadata {
-    name = "${var.app_name}-ingress"
+    name      = "${var.app_name}-ingress"
+    namespace = var.namespace
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
     }

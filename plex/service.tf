@@ -1,6 +1,7 @@
 resource "kubernetes_service" "plex" {
   metadata {
-    name = "${var.app_name}-service"
+    name      = "${var.app_name}-service"
+    namespace = var.namespace
   }
 
   spec {
@@ -20,7 +21,8 @@ resource "kubernetes_service" "plex" {
 
 resource "kubernetes_service" "plex-tcp" {
   metadata {
-    name = "${var.app_name}-tcp-service"
+    name      = "${var.app_name}-tcp-service"
+    namespace = var.namespace
   }
 
   spec {
