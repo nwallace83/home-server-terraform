@@ -6,8 +6,8 @@ resource "kubernetes_config_map" "tcp_services" {
   }
 
   data = {
-    "53"   = "default/pihole-dns-service:53"
-    "8112" = "default/delugevpn-service:8112"
+    "53"   = "${var.namespace}/pihole-dns-service:53"
+    "8112" = "${var.namespace}/delugevpn-service:8112"
   }
 }
 
@@ -18,7 +18,7 @@ resource "kubernetes_config_map" "udp_services" {
   }
 
   data = {
-    "53" = "default/pihole-dns-service:53"
+    "53" = "${var.namespace}/pihole-dns-service:53"
   }
 }
 

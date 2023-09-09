@@ -6,7 +6,7 @@ module "sickchill" {
   local_gid             = var.local_gid
   timezone              = var.timezone
   local_domain          = var.local_domain
-  namespace             = var.namespace
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -20,7 +20,7 @@ module "radarr" {
   local_gid             = var.local_gid
   timezone              = var.timezone
   local_domain          = var.local_domain
-  namespace             = var.namespace
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -34,7 +34,7 @@ module "prowlarr" {
   local_gid             = var.local_gid
   timezone              = var.timezone
   local_domain          = var.local_domain
-  namespace             = var.namespace
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -50,7 +50,7 @@ module "delugevpn" {
   delugevpn_vpn_user     = var.delugevpn_vpn_user
   timezone               = var.timezone
   local_domain           = var.local_domain
-  namespace              = var.namespace
+  namespace              = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name  = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -63,7 +63,7 @@ module "plex" {
   local_ip              = var.local_ip
   timezone              = var.timezone
   local_domain          = var.local_domain
-  namespace             = var.namespace
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -75,7 +75,7 @@ module "handbrake" {
   volumes               = var.plex_volumes
   timezone              = var.timezone
   local_domain          = var.local_domain
-  namespace             = var.namespace
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -110,7 +110,7 @@ module "pihole" {
   timezone              = var.timezone
   local_domain          = var.local_domain
   pihole_custom_list    = var.pihole_custom_list
-  namespace             = var.namespace
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
 }
 
@@ -120,14 +120,14 @@ module "ingress_tcp_udp" {
   source = "./ingress-tcp-udp"
 
   ingress_namespace = var.ingress_namespace
-  namespace         = var.namespace
+  namespace         = kubernetes_namespace.project-namespace.metadata.0.name
   tls_certificate   = var.tls_certificate
   tls_key           = var.tls_key
 }
 
 #####################################################################################################################
 
-resource "kubernetes_namespace" "home-server" {
+resource "kubernetes_namespace" "project-namespace" {
   metadata {
     name = var.namespace
   }
