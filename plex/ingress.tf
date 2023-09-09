@@ -22,7 +22,7 @@ resource "kubernetes_ingress_v1" "plex_ingress" {
           path_type = "Prefix"
           backend {
             service {
-              name = "${var.app_name}-http-service"
+              name = kubernetes_service.plex.metadata.0.name
 
               port {
                 number = 80
