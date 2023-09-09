@@ -10,4 +10,3 @@ resource "kubernetes_config_map" "sickchill_env_config_map" {
     "TZ"   = var.timezone
   }
 }
-

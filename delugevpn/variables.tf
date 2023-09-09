@@ -15,7 +15,7 @@ variable "local_gid" {
 }
 
 variable "app_name" {
-  type = string
+  type    = string
   default = "delugevpn"
 }
 
