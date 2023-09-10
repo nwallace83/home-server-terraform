@@ -44,6 +44,39 @@ resource "kubernetes_deployment" "delugevpn" {
           }
         }
 
+        volume {
+          name = "ca-crt"
+          config_map {
+            name = kubernetes_config_map.delugevpn_openvpn_volume.metadata.0.name
+            items {
+              key = "ca.rsa.2048.crt"
+              path = "ca.rsa.2048.crt"
+            }
+          }
+        }
+
+        volume {
+          name = "crl-pem"
+          config_map {
+            name = kubernetes_config_map.delugevpn_openvpn_volume.metadata.0.name
+            items {
+              key = "crl.rsa.2048.pem"
+              path = "crl.rsa.2048.pem"
+            }
+          }
+        }
+
+        volume {
+          name = "mexico-ovpn"
+          config_map {
+            name = kubernetes_config_map.delugevpn_openvpn_volume.metadata.0.name
+            items {
+              key = "mexico.ovpn"
+              path = "mexico.ovpn"
+            }
+          }
+        }
+
         container {
           name              = var.app_name
           image             = "binhex/arch-delugevpn:latest"
@@ -68,6 +101,24 @@ resource "kubernetes_deployment" "delugevpn" {
               mount_path = volume_mount.value.container_path
               read_only  = volume_mount.value.read_only
             }
+          }
+
+          volume_mount {
+            name = "ca-crt"
+            mount_path = "/config/openvpn/ca.rsa.2048.crt"
+            sub_path = "ca.rsa.2048.crt"
+          }
+
+          volume_mount {
+            name = "crl-pem"
+            mount_path = "/config/openvpn/crl.rsa.2048.pem"
+            sub_path = "crl.rsa.2048.pem"
+          }
+
+          volume_mount {
+            name = "mexico-ovpn"
+            mount_path = "/config/openvpn/mexico.ovpn"
+            sub_path = "mexico.ovpn"
           }
 
           port {
