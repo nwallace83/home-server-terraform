@@ -94,15 +94,6 @@ resource "kubernetes_deployment" "delugevpn" {
             }
           }
 
-          dynamic "volume_mount" {
-            for_each = var.volumes
-            content {
-              name       = volume_mount.value.name
-              mount_path = volume_mount.value.container_path
-              read_only  = volume_mount.value.read_only
-            }
-          }
-
           volume_mount {
             name = "ca-crt"
             mount_path = "/config/openvpn/ca.rsa.2048.crt"
@@ -119,6 +110,15 @@ resource "kubernetes_deployment" "delugevpn" {
             name = "mexico-ovpn"
             mount_path = "/config/openvpn/mexico.ovpn"
             sub_path = "mexico.ovpn"
+          }
+
+          dynamic "volume_mount" {
+            for_each = var.volumes
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.container_path
+              read_only  = volume_mount.value.read_only
+            }
           }
 
           port {
