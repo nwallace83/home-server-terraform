@@ -15,7 +15,7 @@ resource "kubernetes_cron_job_v1" "updatepods" {
         template {
           metadata {}
           spec {
-            service_account_name = kubernetes_service_account.rolloutcron.metadata.0.name
+            service_account_name = var.service_account
 
             dynamic "container" {
               for_each = var.applications

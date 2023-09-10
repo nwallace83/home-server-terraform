@@ -81,20 +81,10 @@ module "handbrake" {
 
 #####################################################################################################################
 
-module "dashboard" {
-  source = "./dashboard"
-
-  tls_certificate     = var.tls_certificate
-  tls_key             = var.tls_key
-  dashboard_namespace = var.dashboard_namespace
-}
-
-#####################################################################################################################
-
 module "service_account" {
-  source = "./service-account"
+  source = "./service-accounts"
 
-  dashboard_namespace = var.dashboard_namespace
+  namespace = kubernetes_namespace.project-namespace.metadata.0.name
 }
 
 #####################################################################################################################
@@ -102,7 +92,8 @@ module "service_account" {
 module "rollout_cron" {
   source = "./rollout-cron"
 
-  namespace = var.namespace
+  namespace = kubernetes_namespace.project-namespace.metadata.0.name
+  service_account = module.service_account.patch_deployment_service_account
 }
 
 #####################################################################################################################

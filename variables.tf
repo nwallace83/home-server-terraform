@@ -41,12 +41,6 @@ variable "ingress_namespace" {
   description = "Namespace for kubernetes ingress"
 }
 
-variable "dashboard_namespace" {
-  type        = string
-  default     = "kube-system"
-  description = "Namespace for kubernetes ingress"
-}
-
 variable "timezone" {
   type        = string
   default     = "America/Denver"
