@@ -1,6 +1,6 @@
-resource "kubernetes_cron_job_v1" "updatepods" {
+resource "kubernetes_cron_job_v1" "update_apps" {
   metadata {
-    name      = "update-pods"
+    name      = "update-apps"
     namespace = var.namespace
   }
 
@@ -20,7 +20,7 @@ resource "kubernetes_cron_job_v1" "updatepods" {
             dynamic "container" {
               for_each = var.applications
               content {
-                name  = "updatepods-${container.value}"
+                name  = "update-app-${container.value}"
                 image = "bitnami/kubectl"
 
                 command = ["kubectl", "rollout", "restart", "deployment", container.value]
