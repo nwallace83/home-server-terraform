@@ -11,12 +11,13 @@ resource "kubernetes_service_account" "rolloutcron" {
 }
 
 ####################################################################################################
+
 resource "kubernetes_secret" "rolloutcron" {
   metadata {
     name      = "rolloutcron-secret"
     namespace = var.namespace
     annotations = {
-      "kubernetes.io/service-account.name" = "rolloutcron"
+      "kubernetes.io/service-account.name" = kubernetes_service_account.rolloutcron.metadata.0.name
     }
   }
 
