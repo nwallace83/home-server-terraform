@@ -32,7 +32,7 @@ variable "local_tls_secret_name" {
 }
 
 variable "namespace" {
-  type        = string
+  type = string
 }
 
 variable "volumes" {

@@ -1,6 +1,6 @@
 resource "kubernetes_secret" "dashboard_certs" {
   metadata {
-    name = "kubernetes-dashboard-certs"
+    name      = "kubernetes-dashboard-certs"
     namespace = var.dashboard_namespace
   }
 

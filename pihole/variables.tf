@@ -40,5 +40,5 @@ variable "pihole_custom_list" {
 }
 
 variable "namespace" {
-  type        = string
+  type = string
 }

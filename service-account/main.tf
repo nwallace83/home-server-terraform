@@ -1,6 +1,6 @@
 resource "kubernetes_secret" "admin_service_account_secret" {
   metadata {
-    name = "admin-service-account-secret"
+    name      = "admin-service-account-secret"
     namespace = var.dashboard_namespace
     annotations = {
       "kubernetes.io/service-account.name" = "admin"
@@ -14,7 +14,7 @@ resource "kubernetes_secret" "admin_service_account_secret" {
 
 resource "kubernetes_service_account" "admin_service_account" {
   metadata {
-    name = "admin"
+    name      = "admin"
     namespace = var.dashboard_namespace
   }
   secret {
@@ -36,8 +36,8 @@ resource "kubernetes_cluster_role_binding" "cluster_admin_role_binding" {
   }
 
   subject {
-    kind = "ServiceAccount"
+    kind      = "ServiceAccount"
     namespace = var.dashboard_namespace
-    name = kubernetes_service_account.admin_service_account.metadata.0.name
+    name      = kubernetes_service_account.admin_service_account.metadata.0.name
   }
 }
