@@ -106,7 +106,7 @@ resource "kubernetes_deployment" "pihole" {
             post_start {
               exec {
                 command = [
-                  "sh", "-c", "sleep 5 && sqlite3 /etc/pihole/gravity.db \"INSERT INTO adlist (address, enabled, comment) VALUES ('https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt', 1, '');\" && sqlite3 /etc/pihole/gravity.db \"INSERT INTO adlist (address, enabled, comment) VALUES ('https://dbl.oisd.nl', 1, '');\" && pihole updateGravity"
+                  "sh", "-c", "sleep 20 && sqlite3 /etc/pihole/gravity.db \"INSERT INTO adlist (address, enabled, comment) VALUES ('https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt', 1, '');\" && sqlite3 /etc/pihole/gravity.db \"INSERT INTO adlist (address, enabled, comment) VALUES ('https://dbl.oisd.nl', 1, '');\" && pihole updateGravity"
                 ]
               }
             }
