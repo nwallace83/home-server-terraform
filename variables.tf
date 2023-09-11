@@ -5,7 +5,7 @@ variable "local_ip" {
 
 variable "pihole_dns_origins" {
   type        = string
-  default     = "1.1.1.1;8.8.8.8;8.8.4.4"
+  default     = "1.1.1.1;8.8.8.8;8.8.4.4;75.75.75.75;75.75.76.76"
   description = "List of remote DNS servers for pihole backend"
 }
 
