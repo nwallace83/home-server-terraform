@@ -49,19 +49,19 @@ resource "kubernetes_deployment" "plex" {
           image             = "plexinc/pms-docker:latest"
           image_pull_policy = "Always"
 
-          # readiness_probe {
-          #   http_get {
-          #     path = "/"
-          #     port = 32400
-          #   }
-          # }
+          readiness_probe {
+            http_get {
+              path = "/web/index.html"
+              port = 32400
+            }
+          }
 
-          # liveness_probe {
-          #   http_get {
-          #     path = "/"
-          #     port = 32400
-          #   }
-          # }
+          liveness_probe {
+            http_get {
+              path = "/web/index.html"
+              port = 32400
+            }
+          }
 
           env_from {
             config_map_ref {

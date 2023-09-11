@@ -8,6 +8,6 @@ resource "kubernetes_config_map" "plex_env_config_map" {
     "ADVERTISE_IP" = "http://${var.local_ip}:32400/,http://${var.app_name}.${var.local_domain}:32400,http://${var.app_name}.${var.local_domain}"
     "TZ"           = var.timezone
     "VERSION"      = "docker"
-    "PLEX_CLAIM"   = "claim-E6EzMUzTg8i8yiXPQWPW"
+    "PLEX_CLAIM"   = "claim-XVsJRWJSQMNyu3RvBWkJ"
   }
 }
