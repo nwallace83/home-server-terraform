@@ -1,6 +1,6 @@
 resource "kubernetes_config_map" "tcp_services" {
   metadata {
-    name      = "nginx-ingress-tcp-microk8s-conf"
+    name      = "tcp-services"
     namespace = var.ingress_namespace
   }
 
@@ -14,7 +14,7 @@ resource "kubernetes_config_map" "tcp_services" {
 
 resource "kubernetes_config_map" "udp_services" {
   metadata {
-    name      = "nginx-ingress-udp-microk8s-conf"
+    name      = "udp-services"
     namespace = var.ingress_namespace
   }
 
