@@ -12,7 +12,7 @@ resource "kubernetes_config_map" "delugevpn_env_config_map" {
     "VPN_PASS"                     = var.delugevpn_vpn_password
     "ENABLE_PRIVOXY"               = "no"
     "STRICT_PORT_FORWARD"          = "yes"
-    "LAN_NETWORK"                  = "192.168.0.0/24"
+    "LAN_NETWORK"                  = "10.244.0.0/16"
     "NAME_SERVERS"                 = "84.200.69.80,37.235.1.174,1.1.1.1,37.235.1.177,84.200.70.40,1.0.0.1"
     "DEBUG"                        = "false"
     "DELUGE_DAEMON_LOG_LEVEL"      = "info"

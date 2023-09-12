@@ -6,7 +6,6 @@ resource "kubernetes_config_map" "tcp_services" {
 
   data = {
     "53"   = "${var.namespace}/pihole-dns-service:53"
-    "8112" = "${var.namespace}/delugevpn-service:8112"
   }
 }
 
