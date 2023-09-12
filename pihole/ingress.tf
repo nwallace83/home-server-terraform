@@ -4,12 +4,12 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
     namespace = var.namespace
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect"           = "true"
-      "nginx.ingress.kubernetes.io/configuration-snippet"  = "if ($uri = /) {return 302 /admin;}"
-      "nginx.ingress.kubernetes.io/use-regex"              = "true"
-      "nginx.ingress.kubernetes.io/affinity"               = "cookie"
-      "nginx.ingress.kubernetes.io/session-cookie-name"    = "INGRESSCOOKIE"
-      "nginx.ingress.kubernetes.io/session-cookie-path"    = "/"
-      "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
+      # "nginx.ingress.kubernetes.io/configuration-snippet"  = "if ($uri = /) {return 302 /admin;}"
+      # "nginx.ingress.kubernetes.io/use-regex"              = "true"
+      # "nginx.ingress.kubernetes.io/affinity"               = "cookie"
+      # "nginx.ingress.kubernetes.io/session-cookie-name"    = "INGRESSCOOKIE"
+      # "nginx.ingress.kubernetes.io/session-cookie-path"    = "/"
+      # "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
     }
   }
 
@@ -25,7 +25,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
       host = "${var.app_name}.${var.local_domain}"
       http {
         path {
-          path      = "/(.*)"
+          path      = "/"
           path_type = "Prefix"
           backend {
             service {
