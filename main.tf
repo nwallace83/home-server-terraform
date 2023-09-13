@@ -72,8 +72,18 @@ module "plex" {
 module "handbrake" {
   source = "./handbrake"
 
-  volumes               = var.plex_volumes
+  volumes               = var.handbrake_volumes
   timezone              = var.timezone
+  local_domain          = var.local_domain
+  namespace             = kubernetes_namespace.project-namespace.metadata.0.name
+  local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name
+}
+
+#####################################################################################################################
+
+module "html_stub" {
+  source = "./html-stub"
+
   local_domain          = var.local_domain
   namespace             = kubernetes_namespace.project-namespace.metadata.0.name
   local_tls_secret_name = module.ingress_tcp_udp.local_tls_secret_name

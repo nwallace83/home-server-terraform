@@ -4,6 +4,7 @@ resource "kubernetes_ingress_v1" "sickchill_ingress" {
     namespace = var.namespace
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
+      "nginx.ingress.kubernetes.io/use-regex"    = "true"
     }
   }
 
@@ -11,7 +12,7 @@ resource "kubernetes_ingress_v1" "sickchill_ingress" {
     ingress_class_name = "nginx"
 
     tls {
-      hosts       = ["${var.app_name}.${var.local_domain}"]
+      hosts       = ["*.${var.local_domain}"]
       secret_name = var.local_tls_secret_name
     }
 
