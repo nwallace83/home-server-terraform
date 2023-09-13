@@ -41,3 +41,5 @@ tfplan
 
 # don't accidentalliy upload vpn credentials
 credentials.conf
+
+localhost-tls-cert*

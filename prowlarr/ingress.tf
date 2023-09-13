@@ -5,7 +5,7 @@ resource "kubernetes_ingress_v1" "prowlarr_ingress" {
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
       "nginx.ingress.kubernetes.io/use-regex"    = "true"
-      "cert-manager.io/issuer"                   = "letsencrypt-prod"
+      "cert-manager.io/cluster-issuer"           = "letsencrypt-prod"
     }
   }
 

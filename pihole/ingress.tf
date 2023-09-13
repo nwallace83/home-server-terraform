@@ -10,7 +10,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
       "nginx.ingress.kubernetes.io/session-cookie-name"    = "INGRESSCOOKIE"
       "nginx.ingress.kubernetes.io/session-cookie-path"    = "/"
       "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
-      "cert-manager.io/issuer"                             = "letsencrypt-prod"
+      "cert-manager.io/cluster-issuer"                     = "letsencrypt-prod"
     }
   }
 
