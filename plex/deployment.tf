@@ -50,6 +50,7 @@ resource "kubernetes_deployment" "plex" {
           image_pull_policy = "Always"
 
           readiness_probe {
+            initial_delay_seconds = 20
             http_get {
               path = "/web/index.html"
               port = 32400

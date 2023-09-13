@@ -66,6 +66,7 @@ resource "kubernetes_deployment" "pihole" {
           image_pull_policy = "Always"
 
           readiness_probe {
+            initial_delay_seconds = 30
             http_get {
               path = "/admin"
               port = 80
