@@ -10,6 +10,7 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
       "nginx.ingress.kubernetes.io/session-cookie-name"    = "INGRESSCOOKIE"
       "nginx.ingress.kubernetes.io/session-cookie-path"    = "/"
       "nginx.ingress.kubernetes.io/session-cookie-max-age" = "3600"
+      "cert-manager.io/issuer"                             = "letsencrypt-prod"
     }
   }
 
@@ -18,14 +19,14 @@ resource "kubernetes_ingress_v1" "pihole_ingress" {
 
     tls {
       hosts       = ["*.${var.local_domain}"]
-      secret_name = var.local_tls_secret_name
+      secret_name = "${var.local_domain}-tls-secret"
     }
 
     rule {
       host = "${var.app_name}.${var.local_domain}"
       http {
         path {
-          path      = "/"
+          path      = "/(.*)"
           path_type = "Prefix"
           backend {
             service {

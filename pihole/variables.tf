@@ -31,10 +31,6 @@ variable "local_domain" {
   type = string
 }
 
-variable "local_tls_secret_name" {
-  type = string
-}
-
 variable "pihole_custom_list" {
   type = string
 }

@@ -7,10 +7,6 @@ variable "app_name" {
   default = "html-stub"
 }
 
-variable "local_tls_secret_name" {
-  type = string
-}
-
 variable "namespace" {
   type = string
 }

@@ -5,11 +5,3 @@ variable "ingress_namespace" {
 variable "namespace" {
   type = string
 }
-
-variable "tls_certificate" {
-  type = string
-}
-
-variable "tls_key" {
-  type = string
-}

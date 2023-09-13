@@ -5,7 +5,7 @@ resource "kubernetes_ingress_v1" "html_stub_ingress" {
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
       "nginx.ingress.kubernetes.io/use-regex"    = "true"
-      "cert-manager.io/issuer"                   = "letsencrypt-staging"
+      "cert-manager.io/issuer"                   = "letsencrypt-prod"
     }
   }
 
@@ -14,7 +14,7 @@ resource "kubernetes_ingress_v1" "html_stub_ingress" {
 
     tls {
       hosts       = ["*.${var.local_domain}"]
-      secret_name = var.local_tls_secret_name
+      secret_name = "${var.local_domain}-tls-secret"
     }
 
     rule {
