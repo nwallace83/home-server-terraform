@@ -1,6 +1,6 @@
-resource "kubernetes_config_map" "prowlarr_env_config_map" {
+resource "kubernetes_config_map" "prowlarr_env" {
   metadata {
-    name      = "${var.app_name}-env-config-map"
+    name      = "${var.app_name}-env"
     namespace = var.namespace
   }
 

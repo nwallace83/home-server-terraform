@@ -1,6 +1,6 @@
-resource "kubernetes_config_map" "plex_env_config_map" {
+resource "kubernetes_config_map" "plex_env" {
   metadata {
-    name      = "${var.app_name}-env-config-map"
+    name      = "${var.app_name}-env"
     namespace = var.namespace
   }
 
@@ -8,6 +8,5 @@ resource "kubernetes_config_map" "plex_env_config_map" {
     "ADVERTISE_IP" = "http://${var.local_ip}:32400,http://${var.app_name}.${var.local_domain}:32400,http://${var.app_name}.${var.local_domain}"
     "TZ"           = var.timezone
     "VERSION"      = "docker"
-    "PLEX_CLAIM"   = "claim-XVsJRWJSQMNyu3RvBWkJ"
   }
 }

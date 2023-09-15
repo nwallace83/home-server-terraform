@@ -1,6 +1,6 @@
-resource "kubernetes_ingress_v1" "pihole_ingress" {
+resource "kubernetes_ingress_v1" "pihole" {
   metadata {
-    name      = "pihole-ingress"
+    name      = "pihole"
     namespace = var.namespace
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect"           = "true"

@@ -1,6 +1,6 @@
-resource "kubernetes_ingress_v1" "prowlarr_ingress" {
+resource "kubernetes_ingress_v1" "prowlarr" {
   metadata {
-    name      = "${var.app_name}-ingress"
+    name      = "${var.app_name}"
     namespace = var.namespace
     annotations = {
       "nginx.ingress.kubernetes.io/ssl-redirect" = "true"

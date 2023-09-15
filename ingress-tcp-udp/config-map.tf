@@ -5,7 +5,7 @@ resource "kubernetes_config_map" "tcp_services" {
   }
 
   data = {
-    "53"   = "${var.namespace}/pihole-dns-service:53"
+    "53"   = "${var.namespace}/pihole-dns:53"
   }
 }
 
@@ -18,6 +18,6 @@ resource "kubernetes_config_map" "udp_services" {
   }
 
   data = {
-    "53" = "${var.namespace}/pihole-dns-service:53"
+    "53" = "${var.namespace}/pihole-dns:53"
   }
 }

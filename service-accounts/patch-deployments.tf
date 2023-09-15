@@ -12,9 +12,9 @@ resource "kubernetes_service_account" "patch_deployment_sa" {
 
 ####################################################################################################
 
-resource "kubernetes_secret" "patch_deployment_sa_secret" {
+resource "kubernetes_secret" "patch_deployment_sa" {
   metadata {
-    name      = "patch-deployment-sa-secret"
+    name      = "patch-deployment-sa"
     namespace = var.namespace
     annotations = {
       "kubernetes.io/service-account.name" = kubernetes_service_account.patch_deployment_sa.metadata.0.name
@@ -26,9 +26,9 @@ resource "kubernetes_secret" "patch_deployment_sa_secret" {
 
 ####################################################################################################
 
-resource "kubernetes_role" "patch_deployment_role" {
+resource "kubernetes_role" "patch_deployment" {
   metadata {
-    name      = "patch-deployment-role"
+    name      = "patch-deployment"
     namespace = var.namespace
   }
 
@@ -41,16 +41,16 @@ resource "kubernetes_role" "patch_deployment_role" {
 
 ####################################################################################################
 
-resource "kubernetes_role_binding" "patch_deployment_role_binding" {
+resource "kubernetes_role_binding" "patch_deployment" {
   metadata {
-    name      = "patch-deployment-role-binding"
+    name      = "patch-deployment"
     namespace = var.namespace
   }
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "Role"
-    name      = kubernetes_role.patch_deployment_role.metadata.0.name
+    name      = kubernetes_role.patch_deployment.metadata.0.name
   }
 
   subject {

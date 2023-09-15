@@ -36,7 +36,7 @@ resource "kubernetes_deployment" "pihole" {
         volume {
           name = "custom-list"
           config_map {
-            name = kubernetes_config_map.pihole_custom_list_map.metadata.0.name
+            name = kubernetes_config_map.pihole_custom_list.metadata.0.name
             items {
               key  = "custom.list"
               path = "custom.list"
@@ -98,7 +98,7 @@ resource "kubernetes_deployment" "pihole" {
 
           env_from {
             config_map_ref {
-              name = kubernetes_config_map.pihole_env_config_map.metadata.0.name
+              name = kubernetes_config_map.pihole_env.metadata.0.name
 
             }
           }

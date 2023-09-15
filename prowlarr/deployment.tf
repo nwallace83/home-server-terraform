@@ -66,7 +66,7 @@ resource "kubernetes_deployment" "prowlarr" {
 
           env_from {
             config_map_ref {
-              name = kubernetes_config_map.prowlarr_env_config_map.metadata.0.name
+              name = kubernetes_config_map.prowlarr_env.metadata.0.name
             }
           }
 

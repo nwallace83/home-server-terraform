@@ -1,6 +1,6 @@
 resource "kubernetes_service" "html_stub" {
   metadata {
-    name      = "${var.app_name}-service"
+    name      = "${var.app_name}"
     namespace = var.namespace
   }
 

@@ -66,7 +66,7 @@ resource "kubernetes_deployment" "plex" {
 
           env_from {
             config_map_ref {
-              name = kubernetes_config_map.plex_env_config_map.metadata.0.name
+              name = kubernetes_config_map.plex_env.metadata.0.name
             }
           }
 
