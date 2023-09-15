@@ -11,11 +11,7 @@ resource "kubernetes_deployment" "delugevpn" {
     replicas = 1
 
     strategy {
-      type = "RollingUpdate"
-      rolling_update {
-        max_surge       = 1
-        max_unavailable = 0
-      }
+      type = "Recreate"
     }
 
     revision_history_limit = 0
@@ -89,8 +85,9 @@ resource "kubernetes_deployment" "delugevpn" {
           }
 
           readiness_probe {
-            initial_delay_seconds = 360
+            initial_delay_seconds = 60
             failure_threshold = 10
+            period_seconds = 30
             http_get {
               path = "/"
               port = 8112
@@ -98,8 +95,9 @@ resource "kubernetes_deployment" "delugevpn" {
           }
 
           liveness_probe {
-            initial_delay_seconds = 360
+            initial_delay_seconds = 60
             failure_threshold = 10
+            period_seconds = 30
             http_get {
               path = "/"
               port = 8112
