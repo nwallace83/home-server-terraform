@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "handbrake" {
           image_pull_policy = "Always"
 
           readiness_probe {
-            initial_delay_seconds = 20
+            initial_delay_seconds = 60
             http_get {
               path = "/"
               port = 5800
@@ -58,6 +58,7 @@ resource "kubernetes_deployment" "handbrake" {
           }
 
           liveness_probe {
+            initial_delay_seconds = 60
             http_get {
               path = "/"
               port = 5800

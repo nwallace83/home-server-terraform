@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "htmlstub" {
           image_pull_policy = "Always"
 
           readiness_probe {
-            initial_delay_seconds = 30
+            initial_delay_seconds = 60
             http_get {
               path = "/"
               port = 80
@@ -58,6 +58,7 @@ resource "kubernetes_deployment" "htmlstub" {
           }
 
           liveness_probe {
+            initial_delay_seconds = 60
             http_get {
               path = "/"
               port = 80

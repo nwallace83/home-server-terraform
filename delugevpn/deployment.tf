@@ -88,6 +88,24 @@ resource "kubernetes_deployment" "delugevpn" {
             }
           }
 
+          readiness_probe {
+            initial_delay_seconds = 360
+            failure_threshold = 10
+            http_get {
+              path = "/"
+              port = 8112
+            }
+          }
+
+          liveness_probe {
+            initial_delay_seconds = 360
+            failure_threshold = 10
+            http_get {
+              path = "/"
+              port = 8112
+            }
+          }
+
           env_from {
             config_map_ref {
               name = kubernetes_config_map.delugevpn_env.metadata.0.name

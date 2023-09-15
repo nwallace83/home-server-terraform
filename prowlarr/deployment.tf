@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "prowlarr" {
           image_pull_policy = "Always"
 
           readiness_probe {
-            initial_delay_seconds = 20
+            initial_delay_seconds = 60
             http_get {
               path = "/"
               port = 9696
@@ -58,6 +58,7 @@ resource "kubernetes_deployment" "prowlarr" {
           }
 
           liveness_probe {
+            initial_delay_seconds = 60
             http_get {
               path = "/"
               port = 9696
