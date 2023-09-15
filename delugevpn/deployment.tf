@@ -86,8 +86,9 @@ resource "kubernetes_deployment" "delugevpn" {
 
           readiness_probe {
             initial_delay_seconds = 60
-            failure_threshold = 10
-            period_seconds = 30
+            failure_threshold = 30
+            period_seconds = 10
+            timeout_seconds = 5
             http_get {
               path = "/"
               port = 8112
@@ -96,8 +97,9 @@ resource "kubernetes_deployment" "delugevpn" {
 
           liveness_probe {
             initial_delay_seconds = 60
-            failure_threshold = 10
-            period_seconds = 30
+            failure_threshold = 30
+            period_seconds = 10
+            timeout_seconds = 5
             http_get {
               path = "/"
               port = 8112
